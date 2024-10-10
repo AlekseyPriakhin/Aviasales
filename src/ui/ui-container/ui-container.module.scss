@@ -1,0 +1,17 @@
+.container {
+  width: 100%;
+  height: 100%;
+  margin-left: auto;
+  margin-right: auto;
+
+  @include breakpoints.xxs-only {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+
+  @each $name, $value in breakpoints.$breakpoints {
+    @include breakpoints.media-breakpoint-up($name) {
+      max-width: map-get(breakpoints.$box-widths, $name);
+    }
+  }
+}
