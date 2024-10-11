@@ -1,0 +1,28 @@
+.header {
+  display: flex;
+  position: sticky;
+  // background: colors.$green-300;
+  padding: 18px 0;
+
+  border-bottom: 1px solid var(--g-color-private-brand-500-solid);
+}
+
+.links {
+  display: flex;
+  gap: 24px;
+  align-items: center;
+  height: 100%;
+  font-size: 1.5em;
+
+  .link {
+    &:hover {
+      text-decoration: underline;
+      cursor: pointer;
+    }
+  }
+  
+  span {
+    opacity: 0.5;
+    pointer-events: none;
+  }
+}

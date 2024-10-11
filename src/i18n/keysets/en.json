@@ -1,0 +1,9 @@
+{
+  "common": {
+    "hello": "hello {{name}}",
+    "clickButton": "click me"
+  },
+  "routes": {
+    "/": "Root"
+  }
+}

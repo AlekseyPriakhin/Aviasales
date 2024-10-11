@@ -1,19 +1,14 @@
-import UIContainer from '@/ui/ui-container/ui-container';
-import { Button } from '@gravity-ui/uikit';
+'use client';
 
+import UIContainer from '@/ui/ui-container/ui-container';
 import styles from './page.module.scss';
 
-export default function Home() {
+const Page = () => {
   return (
-    <div className={styles.page}>
-      <UIContainer>
-        <Button
-          type="button"
-          size="xl"
-          view="action">
-          Click me
-        </Button>
-      </UIContainer>
-    </div>
+    <UIContainer>
+      <div className={styles['slides']}></div>
+    </UIContainer>
   );
-}
+};
+
+export default Page;

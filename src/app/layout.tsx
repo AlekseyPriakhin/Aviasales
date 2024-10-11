@@ -5,6 +5,8 @@ import styles from './layout.module.scss';
 
 import { ThemeProvider } from '@gravity-ui/uikit';
 import type { Theme } from '@gravity-ui/uikit';
+import ReactQueryProvider from '@/providers/reactQuery';
+import Header from '@/components/header/header';
 
 export const metadata: Metadata = {
   title: 'Aviasales app',
@@ -20,12 +22,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ru">
-      <body className={DEFAULT_BODY_CLASSNAME}>
-        <ThemeProvider theme={DEFAULT_THEME}>
-          <main className={styles['main']}>{children}</main>
-        </ThemeProvider>
-      </body>
+    <html>
+      <ReactQueryProvider>
+        <body className={[DEFAULT_BODY_CLASSNAME, styles['body']].join(' ')}>
+          <ThemeProvider theme={DEFAULT_THEME}>
+            <Header />
+            <main className={styles['main']}>{children}</main>
+          </ThemeProvider>
+        </body>
+      </ReactQueryProvider>
     </html>
   );
 }

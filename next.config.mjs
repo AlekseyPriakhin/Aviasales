@@ -4,7 +4,8 @@ const nextConfig = {
     typedRoutes: true
   },
   sassOptions: {
-    additionalData: `@use '@/styles/_breakpoints.scss' as breakpoints;`,
+    additionalData: `@use '@/styles/_breakpoints.scss' as breakpoints;
+                      @use '@/styles/_colors.scss' as colors;`,
   },
 };
 

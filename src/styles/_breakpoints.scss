@@ -13,9 +13,9 @@ $box-widths: (
   xs: 468px,
   sm: 620px,
   md: 876px,
-  lg: 1132px,
-  xl: 1260px,
-  xxl: 1580px,
+  lg: 1032px,
+  xl: 1160px,
+  xxl: 1380px,
 );
 
 @function breakpoint-value($name) {
