@@ -40,7 +40,7 @@
     "prettier": "^3.3.3",
     "sass": "^1.79.4",
     "sass-loader": "^16.0.2",
-    "stylelint": "^16.9.0",
+    "stylelint": "^15.8.0",
     "typescript": "^5"
   }
 }

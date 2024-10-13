@@ -8,12 +8,16 @@ import { useI18n } from '@/hooks/useI18n';
 type THref = __next_route_internal_types__.RouteImpl<''>;
 interface ILink {
   href: THref | null;
-  label?: string;
+  label: string;
 }
-const links: ILink[] = [{ href: '/' }, { label: 'вот сюды', href: null }, { label: 'вот туды', href: null }] as const;
 
-export default function Header() {  
+export default function Header() {
   const { t } = useI18n();
+  const links: ILink[] = [
+    { label: t('routes', '/'), href: '/' },
+    { label: 'вот сюды', href: null },
+    { label: 'вот туды', href: null },
+  ] as const;
 
   return (
     <header className={styles['header']}>
@@ -23,8 +27,9 @@ export default function Header() {
             return href ? (
               <Link
                 href={href}
+                key={label}
                 className={styles['link']}>
-                {href !== null ? t('routes', href as any) : label}
+                {label}
               </Link>
             ) : (
               <span key={label}> {label} </span>
