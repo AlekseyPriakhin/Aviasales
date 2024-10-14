@@ -1,0 +1,11 @@
+[
+  {
+    "id": 1,
+    "createdAt": "2024-10-17 14:05:51.867",
+    "currency": "RUB",
+    "cost": "12000",
+    "seat": 32,
+    "userId": 1,
+    "routeId": 1
+  }
+]

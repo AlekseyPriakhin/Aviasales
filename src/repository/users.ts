@@ -1,6 +1,6 @@
 import type { IUser } from '@/types/user';
-import { getEntities } from '@/api/storage/data';
-import { wrapToPromise } from '@/api/repository';
+import { getEntities } from '@/data/data';
+import { wrapToPromise } from '@/repository';
 
 export const getUsers = () => {
   return wrapToPromise<IUser[]>(

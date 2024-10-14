@@ -1,6 +1,3 @@
-import type { IUser } from '@/types/user';
-import type { IAviaroute } from '@/types/aviaroute';
-
 type Currency = 'EUR' | 'USD' | 'RUB';
 
 export interface ITicket {
@@ -9,6 +6,6 @@ export interface ITicket {
   currency: Currency;
   cost: number;
   seat: number;
-  user: IUser;
-  route: IAviaroute;
+  userId: number;
+  flightId: number;
 }

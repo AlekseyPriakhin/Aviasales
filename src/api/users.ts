@@ -1,9 +1,9 @@
-import { useSingleQuery } from '@/api';
-import { getUser } from '@/api/repository/users';
+import { useCreateSingleQuery } from '@/api';
+import { getUser } from '@/repository/users';
 import { IUser } from '@/types/user';
 
 export const useUser = (id: number) => {
-  const { data, ...query } = useSingleQuery<IUser | null>({
+  const { data, ...query } = useCreateSingleQuery<IUser | null>({
     key: 'user',
     itemId: id,
     handler: getUser,

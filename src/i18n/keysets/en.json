@@ -1,7 +1,8 @@
 {
   "common": {
     "hello": "hello {{name}}",
-    "clickButton": "click me"
+    "clickButton": "click me",
+    "loadMore": "Load more"
   },
   "routes": {
     "/": "Root"

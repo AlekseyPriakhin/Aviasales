@@ -1,0 +1,38 @@
+[
+  {
+    "id": 1,
+    "company": "Придумать что-нибудь",
+    "date": "2024-10-28 14:00:00",
+    "duration": "2:30:00",
+    "reservedSeatsCount": 45,
+    "totalSeatsCount": 190,
+    "availableSeatsCount": 145,
+    "fromCode": "SVO",
+    "toCode": "SPA",
+    "routeId": 1,
+    "route": {
+      "id": 1,
+      "to": "Moscow",
+      "from": "Saint-Petersburg",
+      "description": "Из Москвы в Расчлениград (Болотоград)"
+    }
+  },
+  {
+    "id": 2,
+    "company": "Придумать что-нибудь",
+    "date": "2024-10-26 14:00:00",
+    "duration": "1:30:00",
+    "reservedSeatsCount": 12,
+    "totalSeatsCount": 156,
+    "availableSeatsCount": 144,
+    "fromCode": "SSR",
+    "toCode": "SVO",
+    "routeId": 2,
+    "route": {
+      "id": 2,
+      "to": "Saint-Petersburg",
+      "from": "Moscow",
+      "description": "Из Расчлениграда в Москву"
+    }
+  }
+]

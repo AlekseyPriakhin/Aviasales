@@ -1,7 +1,8 @@
 {
   "common": {
     "hello": "Привет {{name}}!", 
-    "clickButton": "Нажми на меня"
+    "clickButton": "Нажми на меня",
+    "loadMore": "Показать еще"
   },
   "routes": {
     "/": "Главная"
