@@ -6,7 +6,7 @@ import styles from './layout.module.scss';
 import { ThemeProvider } from '@gravity-ui/uikit';
 import type { Theme } from '@gravity-ui/uikit';
 import ReactQueryProvider from '@/providers/reactQuery';
-import Header from '@/components/header/header';
+import Header from '@/components/Header/header';
 
 export const metadata: Metadata = {
   title: 'Aviasales app',

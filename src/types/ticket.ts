@@ -1,4 +1,4 @@
-type Currency = 'EUR' | 'USD' | 'RUB';
+export type Currency = 'EUR' | 'USD' | 'RUB';
 
 export interface ITicket {
   id: number;

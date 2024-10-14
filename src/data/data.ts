@@ -18,7 +18,7 @@ export interface IDataFlight {
   id: number;
   company: string;
   date: Date;
-  duration: Date;
+  duration: number;
   fromCode: string;
   toCode: string;
   route: IDataRoute;

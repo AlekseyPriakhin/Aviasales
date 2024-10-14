@@ -1,14 +1,14 @@
 [
   {
     "id": 1,
-    "to": "Moscow",
-    "from": "Saint-Petersburg",
+    "to": "Москва",
+    "from": "Санкт-Петербург",
     "description": "Из Москвы в Расчлениград (Болотоград)"
   },
   {
     "id": 2,
-    "to": "Saint-Petersburg",
-    "from": "Moscow",
+    "to": "Санкт-Петербург",
+    "from": "Москва",
     "description": "Из Расчлениграда в Москву"
   }
 ]
