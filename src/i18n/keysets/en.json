@@ -2,7 +2,9 @@
   "common": {
     "hello": "hello {{name}}",
     "clickButton": "click me",
-    "loadMore": "Load more"
+    "loadMore": "Load more",
+    "loading": "Loading...",
+    "flight": "TODO"
   },
   "routes": {
     "/": "Root"

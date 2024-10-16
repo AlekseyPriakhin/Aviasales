@@ -7,10 +7,8 @@
     .g-root {
         @include themes.g-theme-common;
         
-        
         --g-font-family-sans: 'Inter', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
         --g-font-family-monospace: 'Roboto Mono', 'Menlo', 'Monaco', 'Consolas', 'Ubuntu Mono', 'Liberation Mono', 'DejaVu Sans Mono', 'Courier New', 'Courier', monospace;
-        
         
         &_theme_light {
             @include themes.g-theme-light;

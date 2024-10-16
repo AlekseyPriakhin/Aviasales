@@ -1,8 +1,10 @@
 'use client';
-import UIContainer from '@/ui/ui-container/ui-container';
+import UIContainer from '@/ui/UIContainer/UIContainer';
 import styles from './header.module.scss';
 import Link from 'next/link';
 import { useI18n } from '@/hooks/useI18n';
+import { useTheme } from '@/hooks/useTheme';
+import { Button } from '@gravity-ui/uikit';
 
 // eslint-disable-next-line camelcase
 type THref = __next_route_internal_types__.RouteImpl<''>;
@@ -13,6 +15,9 @@ interface ILink {
 
 export default function Header() {
   const { t } = useI18n();
+
+  const { switchTheme } = useTheme();
+
   const links: ILink[] = [
     { label: t('routes', '/'), href: '/' },
     { label: 'вот сюды', href: null },
@@ -36,6 +41,7 @@ export default function Header() {
             );
           })}
         </div>
+        <Button onClick={switchTheme}> switch </Button>
       </UIContainer>
     </header>
   );

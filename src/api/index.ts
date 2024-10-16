@@ -40,7 +40,7 @@ interface IUsePaginatedQueryParams {
 }
 
 interface ISingleQueryParams<T = unknown> {
-  key: string;
+  key: string[];
   itemId: string | number;
   handler: (id: number) => Promise<IResponse<T>> | IResponse<T>;
 }

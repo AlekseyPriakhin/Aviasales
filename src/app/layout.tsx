@@ -7,13 +7,14 @@ import { ThemeProvider } from '@gravity-ui/uikit';
 import type { Theme } from '@gravity-ui/uikit';
 import ReactQueryProvider from '@/providers/reactQuery';
 import Header from '@/components/Header/header';
+import type { AppTheme } from '@/hooks/useTheme';
 
 export const metadata: Metadata = {
   title: 'Aviasales app',
   description: 'SPA development course',
 };
 
-const DEFAULT_THEME: Theme = 'dark';
+const DEFAULT_THEME: AppTheme = 'dark';
 const DEFAULT_BODY_CLASSNAME = `g-root g-root_theme_${DEFAULT_THEME}`;
 
 export default function RootLayout({
