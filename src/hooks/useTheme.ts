@@ -8,7 +8,7 @@ export const useTheme = () => {
   const [bodyClassName, setBodyClassName] = useState(`g-root g-root_theme_${theme}`);
 
   const switchTheme = () => {
-    const prevTheme = theme;
+    // const prevTheme = theme;
 
     if (theme === 'dark') setTheme('light');
     else setTheme('dark');

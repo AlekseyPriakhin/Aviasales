@@ -1,4 +1,4 @@
-import type { IPagination, IResponse, IResponseList } from '@/api';
+import type { IPagination } from '@/app/api';
 
 const PER = 10;
 
@@ -19,20 +19,4 @@ export const paginate = <T = unknown>(data: T[], page: number, per = PER): [T[],
       count: slicedData.length,
     },
   ];
-};
-
-export const wrapToPromise = <T = unknown>(data: T) => {
-  return new Promise<IResponse<T>>(res => {
-    setTimeout(() => {
-      res({ data });
-    }, 150);
-  });
-};
-
-export const wrapToListPromise = <T = unknown>(data: T[], pagination: IPagination) => {
-  return new Promise<IResponseList<T>>(res => {
-    setTimeout(() => {
-      res({ data, pagination });
-    }, 150);
-  });
 };

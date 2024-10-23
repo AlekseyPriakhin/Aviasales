@@ -7,24 +7,9 @@ import {
   useQuery,
 } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
+import type { IPagination, IResponse, IResponseList } from '@/app/api';
 
 //API Types
-
-export interface IPagination {
-  page: number;
-  count: number;
-  total: number;
-  totalPages: number;
-}
-
-export interface IResponse<T> {
-  data: T | null;
-}
-
-export interface IResponseList<T> {
-  data: T[];
-  pagination: IPagination;
-}
 
 export interface IPaginationParams {
   page?: number;
