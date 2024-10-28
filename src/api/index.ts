@@ -7,6 +7,7 @@ import {
   useQuery,
 } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
+import { api } from '@/axios';
 import type { IPagination, IResponse, IResponseList } from '@/app/api';
 
 //API Types
@@ -24,10 +25,10 @@ interface IUsePaginatedQueryParams {
   page: number;
 }
 
-interface ISingleQueryParams<T = unknown> {
+interface ISingleQueryParams {
   key: string[];
   itemId: string | number;
-  handler: (id: number) => Promise<IResponse<T>> | IResponse<T>;
+  url: string;
 }
 
 interface IPaginatedQueryParams<T = unknown, TParams extends object = object> {
@@ -42,13 +43,13 @@ export const purifyObject = <T extends object = object>(obj: T): T => {
   return res as T;
 };
 
-export const useCreateSingleQuery = <T>({ key, itemId, handler }: ISingleQueryParams<T>) => {
+export const useCreateSingleQuery = <T>({ key, itemId, url }: ISingleQueryParams) => {
   const queryKey = [key, itemId];
 
   const query = useQuery({
     queryKey,
-    queryFn: () => handler(Number(itemId)),
-    select: res => res.data,
+    queryFn: () => api.get<IResponse<T>>(`${url}/${itemId}`),
+    select: res => res.data.data,
     placeholderData: keepPreviousData,
   });
 
@@ -95,13 +96,13 @@ interface IInfiniteParams<T = any, Params extends IParams = IParams> {
   key: string[];
   initParams?: Params;
   options?: Partial<InfiniteQueryOptions<T>>;
-  handler: (params?: Params) => Promise<IResponseList<T>> | IResponseList<T>;
+  url: string;
 }
 
 export const useCreateInfiniteQuery = <T = any, Params extends IParams = IParams>({
   key,
   options,
-  handler,
+  url,
   initParams = {} as Params,
 }: IInfiniteParams<T, Params>) => {
   const [params, setParams] = useState(purifyObject(initParams));
@@ -114,13 +115,14 @@ export const useCreateInfiniteQuery = <T = any, Params extends IParams = IParams
 
   const query = useInfiniteQuery({
     queryKey,
-    queryFn: ({ pageParam }) => handler({ page: pageParam, ...params }),
+    queryFn: async ({ pageParam }) => {
+      const { data } = await api.get<IResponseList<T>>(url, { params: { page: pageParam, ...initParams } });
+      return data;
+    },
     placeholderData: keepPreviousData,
     initialPageParam: 1,
-    getNextPageParam: ({ pagination }) => {
-      // eslint-disable-next-line @typescript-eslint/no-use-before-define
-      // setPagination(pagination);
-      return pagination.page < pagination.totalPages ? pagination.page + 1 : undefined;
+    getNextPageParam: res => {
+      return res.pagination.page < res.pagination.totalPages ? res.pagination.page + 1 : undefined;
     },
     ...options,
   });

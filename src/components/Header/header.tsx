@@ -3,8 +3,7 @@ import UIContainer from '@/ui/UIContainer/UIContainer';
 import styles from './header.module.scss';
 import Link from 'next/link';
 import { useI18n } from '@/hooks/useI18n';
-import { useTheme } from '@/hooks/useTheme';
-import { Button } from '@gravity-ui/uikit';
+import HeaderLoginOrUser from '../HeaderLoginOrUser/headerLoginOrUser';
 
 // eslint-disable-next-line camelcase
 type THref = __next_route_internal_types__.RouteImpl<''>;
@@ -16,17 +15,14 @@ interface ILink {
 export default function Header() {
   const { t } = useI18n();
 
-  const { switchTheme } = useTheme();
-
   const links: ILink[] = [
     { label: t('routes', '/'), href: '/' },
-    { label: 'вот сюды', href: null },
-    { label: 'вот туды', href: null },
+    { label: t('routes', '/flights'), href: '/flights' },
   ] as const;
 
   return (
     <header className={styles['header']}>
-      <UIContainer>
+      <UIContainer className={styles['content']}>
         <div className={styles['links']}>
           {links.map(({ label, href }) => {
             return href ? (
@@ -41,7 +37,7 @@ export default function Header() {
             );
           })}
         </div>
-        <Button onClick={switchTheme}> switch </Button>
+        <HeaderLoginOrUser className={styles['login-or-user']} />
       </UIContainer>
     </header>
   );

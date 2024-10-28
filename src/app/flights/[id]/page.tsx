@@ -1,11 +1,12 @@
 'use client';
-
-import { useFlight } from '@/api/flights';
 import PageContent from '@/components/PageContent/PageContent';
 import PageHeader from '@/components/PageHeader/PageHeader';
-import { useI18n } from '@/hooks/useI18n';
 import PageTemplate from '@/templates/PageTemplate/PageTemplate';
 import UIContainer from '@/ui/UIContainer/UIContainer';
+import { useFlight } from '@/api/flights';
+import { useI18n } from '@/hooks/useI18n';
+import { Button } from '@gravity-ui/uikit';
+import { signIn, useSession } from 'next-auth/react';
 
 interface IProps {
   params: {
@@ -17,6 +18,8 @@ const Flight = ({ params: { id } }: IProps) => {
   const { t } = useI18n();
   const { flight } = useFlight(id);
 
+  const { status } = useSession();
+
   if (!flight) return <UIContainer> {t('common', 'loading')} </UIContainer>;
 
   return (
@@ -27,9 +30,20 @@ const Flight = ({ params: { id } }: IProps) => {
         {' ---> '}
         {flight.route.to}
       </PageHeader>
-      <PageContent background="accent">{flight.route.description}</PageContent>
-      <PageContent background="primary">{flight.route.description}</PageContent>
-      <PageContent background="secondary">{flight.route.description}</PageContent>
+      <PageContent background="secondary">
+        {flight.route.description}
+        <div>
+          {flight.availableSeatsCount > 0 ? (
+            status === 'unauthenticated' ? (
+              <Button onClick={() => signIn()}> Авторизоваться </Button>
+            ) : (
+              <Button view="normal-contrast"> Оформить </Button>
+            )
+          ) : (
+            <span> Места кончились </span>
+          )}
+        </div>
+      </PageContent>
     </PageTemplate>
   );
 };

@@ -1,22 +1,55 @@
 import type { IPagination } from '@/app/api';
-
-const PER = 10;
+import { Prisma } from '@prisma/client';
 
 export const filter = <T = unknown>(data: T[], cb: (item: T) => boolean) => {
   return data.map(cb);
 };
 
-export const paginate = <T = unknown>(data: T[], page: number, per = PER): [T[], IPagination] => {
-  const sliceStart = (page - 1) * per;
-  const slicedData = data.slice(sliceStart, sliceStart + per);
+const PAGE = 1;
+const PER = 10;
 
+export interface IParams {
+  page?: number;
+  per?: number;
+}
+
+export const paginate = <T = unknown>(data: T[], page: number, total: number, per = 10): [T[], IPagination] => {
   return [
-    slicedData,
+    data,
     {
       page,
-      total: data.length,
-      totalPages: Math.ceil(data.length / per),
-      count: slicedData.length,
+      total,
+      totalPages: Math.ceil(total / per),
+      count: data.length,
     },
   ];
 };
+
+export const paginateV2 = async <T = unknown, U = unknown>(
+  {
+    query,
+    mapper,
+  }: {
+    query: () => Prisma.PrismaPromise<T[]>;
+    mapper: (item: T) => U;
+  },
+  totalQuery: () => Prisma.PrismaPromise<number>,
+  page = PAGE,
+  per = PER,
+): Promise<[U[], IPagination]> => {
+  const data = (await query()).map(mapper);
+
+  const total = await totalQuery();
+
+  return [
+    data,
+    {
+      page,
+      total,
+      totalPages: Math.ceil(total / per),
+      count: data.length,
+    },
+  ];
+};
+
+export const createPaginationParams = (page = PAGE, per = PER) => ({ skip: per * (page - 1), take: per });

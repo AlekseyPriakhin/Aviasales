@@ -7,6 +7,11 @@
   border-bottom: 1px solid var(--g-color-private-brand-500-solid);
 }
 
+.content{ 
+  display: flex;
+  justify-content: space-between;
+}
+
 .links {
   display: flex;
   gap: 24px;
@@ -24,5 +29,9 @@
   span {
     opacity: 0.5;
     pointer-events: none;
+  }
+
+  .login-or-user {
+    justify-self: flex-end;
   }
 }

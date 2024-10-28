@@ -1,6 +1,6 @@
 export interface INodeProps {
   children?: React.ReactNode;
-  styleClass?: string;
+  className?: string;
 }
 
 export type ArrayElement<ArrayType extends readonly unknown[]> = ArrayType extends readonly (infer ElementType)[]

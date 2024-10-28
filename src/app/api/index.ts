@@ -1,3 +1,5 @@
+import { NextRequest } from 'next/server';
+
 export interface IPagination {
   page: number;
   count: number;
@@ -24,3 +26,11 @@ export const wrapToResponse = <T = unknown>(data: T | T[], pagination?: IPaginat
 
   return { data } as IResponse<T>;
 };
+
+const PER = 10;
+const PAGE = 1;
+
+export const extractPaginationData = (req: NextRequest) => ({
+  page: Number(req.nextUrl.searchParams.get('page')) || PAGE,
+  per: Number(req.nextUrl.searchParams.get('per')) || PER,
+});

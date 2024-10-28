@@ -20,8 +20,8 @@ const FlightCard = ({ flight }: IProps) => {
       className={styles['card']}>
       <span>
         {' '}
-        {flight.route.from} <Label theme="normal"> {flight.fromCode}</Label> <ArrowRight /> {flight.route.to}{' '}
-        <Label theme="normal"> {flight.toCode}</Label>
+        {flight.route.from} <Label theme="normal"> {flight.departureAirportCode}</Label> <ArrowRight /> {flight.route.to}{' '}
+        <Label theme="normal"> {flight.arrivingAirportCode}</Label>
       </span>
       <div className={styles['company']}>
         <FaceAlien />

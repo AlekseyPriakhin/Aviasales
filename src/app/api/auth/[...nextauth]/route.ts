@@ -1,23 +1,46 @@
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { PrismaAdapter } from '@auth/prisma-adapter';
+import { PrismaClient } from '@prisma/client';
 import NextAuth, { getServerSession } from 'next-auth';
 import { db } from '@/server/db';
 
 import type { NextAuthOptions } from 'next-auth';
 import type { Adapter } from 'next-auth/adapters';
-import type { IUser } from '@/types/user';
-import type { IResponse } from '@/app/api';
+import { SHA256 } from 'crypto-js';
+
+interface ISessionUser {
+  id: string;
+  name: string;
+  secondName: string;
+  email: string;
+  phoneNumber: string;
+}
+
+// declare module 'next-auth' {
+//   interface Session {
+//     user: ISessionUser;
+//   }
+// }
+
+const checkUser = async ({ email, password }: { email: string; password: string }): Promise<ISessionUser | null> => {
+  const client = new PrismaClient();
+
+  const user = await client.user.findFirst({ where: { email: email } });
+
+  if (user && SHA256(password).toString() === user.password) {
+    return {
+      id: user.id,
+      email: user.email as string,
+      name: user.name as string,
+      secondName: user.secondName as string,
+      phoneNumber: user.phoneNumber as string,
+    };
+  }
+
+  return null;
+};
 
 export const authOptions: NextAuthOptions = {
-  callbacks: {
-    session: ({ session, user }) => ({
-      ...session,
-      user: {
-        ...session.user,
-        id: user.id,
-      },
-    }),
-  },
   session: { strategy: 'jwt' },
   adapter: PrismaAdapter(db) as Adapter,
   providers: [
@@ -28,24 +51,8 @@ export const authOptions: NextAuthOptions = {
         password: { label: 'Пароль', type: 'password' },
       },
       authorize: async credentials => {
-        const res = await fetch('http://localhost:3000/api/login', {
-          method: 'POST',
-          body: JSON.stringify({
-            email: credentials?.mail,
-            password: credentials?.password,
-          }),
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        });
-
-        const json = (await res.json()) as IResponse<IUser>;
-
-        if (json.data?.id) {
-          return json.data;
-        }
-
-        return null;
+        if (!credentials?.mail || !credentials.password) return null;
+        return await checkUser({ email: credentials?.mail, password: credentials?.password });
       },
     }),
   ],

@@ -1,11 +1,12 @@
 'use client';
 import PageContent from '@/components/PageContent/PageContent';
 
-import { useSession } from 'next-auth/react';
-
 const Page = () => {
-  const { status } = useSession();
-  return <PageContent background="secondary">{status}</PageContent>;
+  return (
+    <PageContent background="secondary">
+      <>Главная</>
+    </PageContent>
+  );
 };
 
 export default Page;

@@ -26,6 +26,8 @@ model User {
  
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  tickets Ticket[]
 }
  
 model Account {
@@ -83,4 +85,44 @@ model Authenticator {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
  
   @@id([userId, credentialID])
+}
+
+model Route {
+  id Int @id @default(autoincrement())
+  from String
+  to String
+  description String
+
+  flights Flight[]
+}
+
+model Flight {
+  id Int @id @default(autoincrement())
+  company String
+  date DateTime
+  duration Int // Минуты
+  departureAirport String
+  departureAirportCode String
+  arrivingAirport String
+  arrivingAirportCode String
+  routeId Int
+  reservedSeatsCount Int
+  totalSeatsCount Int
+  availableSeatsCount Int
+
+  route Route @relation(fields: [routeId], references: [id])
+  tickets Ticket[]
+}
+
+model Ticket {
+  id Int @id @default(autoincrement())
+  createdAt DateTime
+  currency String
+  cost Float
+  seat Int
+  userId String
+  flightId Int
+
+  flight Flight @relation(fields: [flightId], references: [id])
+  user User @relation(fields: [userId], references: [id])
 }
