@@ -1,4 +1,4 @@
-type Currency = 'EUR' | 'USD' | 'RUB';
+export type Currency = 'EUR' | 'USD' | 'RUB';
 
 export interface Route {
   id: number;

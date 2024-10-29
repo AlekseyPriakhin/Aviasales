@@ -7,14 +7,13 @@ interface IProps extends INodeProps {
   background?: 'accent' | 'primary' | 'secondary';
 }
 
-const PageHeader = ({ background = 'primary', children, styleClass }: IProps) => {
+const PageHeader = ({ background = 'primary', children, className }: IProps) => {
   return (
     <UIContainer>
       <UICard
         background={background}
-        styleClass={[styles['container'], styleClass].join(' ')}>
-        {' '}
-        {children}{' '}
+        className={[styles['container'], className].join(' ')}>
+        {children}
       </UICard>
     </UIContainer>
   );

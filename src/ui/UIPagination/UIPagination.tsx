@@ -1,4 +1,4 @@
-import { IPagination } from '@/api';
+import { IPagination } from '@/queries';
 import { INodeProps } from '@/types';
 // import { Pagination } from '@gravity-ui/uikit';
 

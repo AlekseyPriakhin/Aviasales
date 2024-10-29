@@ -2,11 +2,11 @@ import styles from './UICard.module.scss';
 import type { INodeProps } from '@/types';
 
 interface IProps extends INodeProps {
-  background?: 'accent' | 'primary' | 'secondary';
+  background?: 'accent' | 'primary' | 'secondary' | 'transparent';
 }
 
-const UICard = ({ background = 'primary', children, styleClass }: IProps) => {
-  const classes = [styleClass, styles['card'], styles[background]].join(' ');
+const UICard = ({ background = 'transparent', children, className }: IProps) => {
+  const classes = [className, styles['card'], styles[background]].join(' ');
 
   return <div className={classes}> {children}</div>;
 };

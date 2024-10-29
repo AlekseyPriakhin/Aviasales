@@ -4,20 +4,20 @@ import styles from './PageContent.module.scss';
 import UICard from '@/ui/UICard/UICard';
 
 interface IProps extends INodeProps {
-  background?: 'primary' | 'secondary' | 'accent';
+  background?: 'primary' | 'secondary' | 'accent' | 'transparent';
 }
 
-const PageContent = ({ background = 'primary', styleClass, children }: IProps) => {
+const PageContent = ({ background = 'transparent', className, children }: IProps) => {
   const containerClasses = [styles['container']].join(' ');
-  const contentClasses = [styleClass, styles['content']].join(' ');
+  const contentClasses = [className, styles['content']].join(' ');
 
   return (
-    <UIContainer styleClass={containerClasses}>
+    <UIContainer className={containerClasses}>
+      {children}
       <UICard
-        styleClass={contentClasses}
+        className={contentClasses}
         background={background}>
         {' '}
-        {children}
       </UICard>
     </UIContainer>
   );

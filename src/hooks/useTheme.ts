@@ -1,20 +1,23 @@
 import { useState } from 'react';
+import { useTheme as useThemeName } from '@gravity-ui/uikit';
 import type { Theme } from '@gravity-ui/uikit';
 
 export type AppTheme = Extract<Theme, 'light' | 'dark'>;
 
 export const useTheme = () => {
-  const [theme, setTheme] = useState<AppTheme>('dark');
-  const [bodyClassName, setBodyClassName] = useState(`g-root g-root_theme_${theme}`);
+  const defaultTheme = useThemeName();
+
+  const [theme, setTheme] = useState<AppTheme>(
+    (['dark', 'light'] as AppTheme[]).includes(defaultTheme as AppTheme) ? (defaultTheme as AppTheme) : 'light',
+  );
 
   const switchTheme = () => {
-    // const prevTheme = theme;
+    const newTheme = theme === 'dark' ? 'light' : 'dark';
 
-    if (theme === 'dark') setTheme('light');
-    else setTheme('dark');
+    document.querySelector('body')?.classList.replace(`g-root_theme_${theme}`, `g-root_theme_${newTheme}`);
 
-    setBodyClassName(`g-root g-root_theme_${theme}`);
+    setTheme(newTheme);
   };
 
-  return { theme, switchTheme, bodyClassName };
+  return { theme, switchTheme };
 };

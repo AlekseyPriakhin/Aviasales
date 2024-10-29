@@ -1,5 +1,5 @@
 import type { IPagination } from '@/app/api';
-import { Prisma } from '@prisma/client';
+import { Prisma, PrismaClient } from '@prisma/client';
 
 export const filter = <T = unknown>(data: T[], cb: (item: T) => boolean) => {
   return data.map(cb);
@@ -53,3 +53,8 @@ export const paginateV2 = async <T = unknown, U = unknown>(
 };
 
 export const createPaginationParams = (page = PAGE, per = PER) => ({ skip: per * (page - 1), take: per });
+
+export const withDbClient = async <T = unknown>(cb: (client: PrismaClient) => Promise<T>) => {
+  const client = new PrismaClient();
+  return cb(client).finally(() => client.$disconnect());
+};

@@ -4,6 +4,7 @@ import styles from './header.module.scss';
 import Link from 'next/link';
 import { useI18n } from '@/hooks/useI18n';
 import HeaderLoginOrUser from '../HeaderLoginOrUser/headerLoginOrUser';
+import ThemeToggler from '../ThemeToggler/ThemeToggler';
 
 // eslint-disable-next-line camelcase
 type THref = __next_route_internal_types__.RouteImpl<''>;
@@ -37,6 +38,7 @@ export default function Header() {
             );
           })}
         </div>
+        <ThemeToggler />
         <HeaderLoginOrUser className={styles['login-or-user']} />
       </UIContainer>
     </header>

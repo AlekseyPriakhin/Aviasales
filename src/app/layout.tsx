@@ -14,7 +14,7 @@ export const metadata: Metadata = {
   description: 'SPA development course',
 };
 
-const DEFAULT_THEME: AppTheme = 'dark';
+const DEFAULT_THEME: AppTheme = 'light';
 const DEFAULT_BODY_CLASSNAME = `g-root g-root_theme_${DEFAULT_THEME}`;
 
 export default async function RootLayout({

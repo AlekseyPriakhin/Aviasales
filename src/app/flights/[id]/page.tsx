@@ -3,7 +3,7 @@ import PageContent from '@/components/PageContent/PageContent';
 import PageHeader from '@/components/PageHeader/PageHeader';
 import PageTemplate from '@/templates/PageTemplate/PageTemplate';
 import UIContainer from '@/ui/UIContainer/UIContainer';
-import { useFlight } from '@/api/flights';
+import { useFlight } from '@/queries/flights';
 import { useI18n } from '@/hooks/useI18n';
 import { Button } from '@gravity-ui/uikit';
 import { signIn, useSession } from 'next-auth/react';

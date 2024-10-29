@@ -1,5 +1,5 @@
 'use client';
-import { useInfiniteFlights } from '@/api/flights';
+import { useInfiniteFlights } from '@/queries/flights';
 import FlightCard from '@/components/FlightCard/FlightCard';
 import PageContent from '@/components/PageContent/PageContent';
 import Link from 'next/link';
@@ -8,7 +8,7 @@ const Flights = () => {
   const { flights, isLoading } = useInfiniteFlights();
 
   return (
-    <PageContent background="secondary">
+    <PageContent>
       <>
         {isLoading ? (
           <p>Загрузка</p>

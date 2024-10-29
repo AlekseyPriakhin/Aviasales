@@ -8,13 +8,17 @@
 }
 
 .accent {
-  background: var(--g-color-private-brand-500-solid);
+  background: var(--g-color-private-brand-100-solid);
 }
 
 .primary {
-  background: var(--g-color-private-brand-400-solid);
+  background: var(--g-color-private-brand-200-solid);
 }
 
 .secondary {
   background: var(--g-color-private-brand-300-solid);
+}
+
+.transparent {
+  background: unset;
 }

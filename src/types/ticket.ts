@@ -6,6 +6,6 @@ export interface ITicket {
   currency: Currency;
   cost: number;
   seat: number;
-  userId: number;
+  userId: string;
   flightId: number;
 }
