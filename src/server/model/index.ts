@@ -41,3 +41,10 @@ export interface Ticket {
   flightId: number;
   flight?: Flight;
 }
+
+export const MODEL_NAMES = {
+  ROUTE: 'Route',
+  FLIGHT: 'Flight',
+  USER: 'User',
+  TICKET: 'Ticket',
+} as const;
