@@ -8,19 +8,12 @@ import {
 } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import { api } from '@/axios';
-import type { IPagination, IResponse, IResponseList } from '@/app/api';
+import { PAGE, PER } from '@api/index';
+
+import type { IPagination, IParams, IResponse, IResponseList } from '@/app/api';
 
 //API Types
 
-export interface IPaginationParams {
-  page?: number;
-  per?: number;
-}
-
-export type IParams = IPaginationParams & {};
-//
-
-const PER_PAGE = 10;
 interface IUsePaginatedQueryParams {
   page: number;
 }
@@ -30,6 +23,7 @@ interface ISingleQueryParams {
   itemId: string | number;
   url: string;
 }
+//
 
 interface IPaginatedQueryParams<T = unknown, TParams extends object = object> {
   key: string;
@@ -78,7 +72,7 @@ export const useCreatePaginatedQuery = <T, TParams extends IUsePaginatedQueryPar
   });
 
   const [isNothingFound, setIsNothingFound] = useState(false);
-  const [pagination, setPagination] = useState<IPagination>({ page: 1, total: 0, count: PER_PAGE, totalPages: 0 });
+  const [pagination, setPagination] = useState<IPagination>({ page: PAGE, total: 0, count: PER, totalPages: 0 });
 
   return { ...query, isNothingFound, queryKey, pagination, params, setParams };
 };
@@ -109,7 +103,7 @@ export const useCreateInfiniteQuery = <T = any, Params extends IParams = IParams
   const queryKey = [key, purifyObject(params)];
 
   const [isNothingFound, setNothingFound] = useState<boolean>();
-  const [pagination, setPagination] = useState<IPagination>({ page: 1, total: 0, count: PER_PAGE, totalPages: 0 });
+  const [pagination, setPagination] = useState<IPagination>({ page: PAGE, total: 0, count: PER, totalPages: 0 });
   const [isFetchNextPageAvailable, setIsFetchNextPageAvailable] = useState(false);
   const [normalizedData, setNormalizedData] = useState<T[]>();
 

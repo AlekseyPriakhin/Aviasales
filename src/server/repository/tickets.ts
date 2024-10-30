@@ -2,11 +2,7 @@ import { createPaginationParams, paginateV2, withDbClient } from '@/server/repos
 import { MODEL_NAMES } from '@/server/model';
 import type { Prisma, Ticket } from '@prisma/client';
 import type { ITicket } from '@/types/ticket';
-import type { IParams } from '@/queries';
-
-export interface ITicketsParams extends IParams {
-  status: 'active' | 'elapsed' | 'all';
-}
+import type { ITicketsParams } from '@api/tickets/route';
 
 const mapTicket = (ticket: Ticket): ITicket => ({
   ...ticket,
@@ -28,7 +24,7 @@ export const getTickets = async ({ page, per, status = 'active' }: ITicketsParam
         ...createPaginationParams(page, per),
         where: { ...filterByStatus(status) },
       });
-    const totalQuery = () => client.ticket.count();
+    const totalQuery = () => client.ticket.count({ where: { ...filterByStatus(status) } });
 
     return paginateV2({ query, mapper: mapTicket }, totalQuery, page, per);
   });

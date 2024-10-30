@@ -1,17 +1,10 @@
-import type { IPagination } from '@/app/api';
 import { Prisma, PrismaClient } from '@prisma/client';
+import { PAGE, PER } from '@api/index';
+import type { IPagination } from '@api/index';
 
 export const filter = <T = unknown>(data: T[], cb: (item: T) => boolean) => {
   return data.map(cb);
 };
-
-const PAGE = 1;
-const PER = 10;
-
-export interface IParams {
-  page?: number;
-  per?: number;
-}
 
 export const paginate = <T = unknown>(data: T[], page: number, total: number, per = 10): [T[], IPagination] => {
   return [
