@@ -3,7 +3,7 @@ import styles from './FlightCard.module.scss';
 import type { INodeProps } from '@/types';
 import type { IFlight } from '@/types/flight';
 import { ArrowRight, FaceAlien } from '@gravity-ui/icons';
-import UIIcon from '@/ui/UIIcon/UIIcon';
+import UIIcon from '@/ui/UIIcon';
 
 interface IProps extends INodeProps {
   flight: IFlight;
@@ -20,8 +20,8 @@ const FlightCard = ({ flight }: IProps) => {
       className={styles['card']}>
       <span>
         {' '}
-        {flight.route.from} <Label theme="normal"> {flight.departureAirportCode}</Label> <ArrowRight /> {flight.route.to}{' '}
-        <Label theme="normal"> {flight.arrivingAirportCode}</Label>
+        {flight.route?.from} <Label theme="normal"> {flight.departureAirportCode}</Label> <ArrowRight />{' '}
+        {flight.route?.to} <Label theme="normal"> {flight.arrivingAirportCode}</Label>
       </span>
       <div className={styles['company']}>
         <FaceAlien />
@@ -29,7 +29,6 @@ const FlightCard = ({ flight }: IProps) => {
       </div>
 
       <div>
-        {flight.minCost}{' '}
         <UIIcon
           size="16px"
           name="rub"

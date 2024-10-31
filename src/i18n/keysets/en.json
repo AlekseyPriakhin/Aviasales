@@ -8,6 +8,7 @@
   },
   "routes": {
     "/": "Root",
-    "/flights": "Flights"
+    "/flights": "Flights",
+    "/tickets": "My Tickets"
   }
 }

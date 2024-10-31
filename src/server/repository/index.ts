@@ -2,8 +2,12 @@ import { Prisma, PrismaClient } from '@prisma/client';
 import { PAGE, PER } from '@api/index';
 import type { IPagination } from '@api/index';
 
-export const filter = <T = unknown>(data: T[], cb: (item: T) => boolean) => {
-  return data.map(cb);
+export type ISession = {
+  email: string;
+};
+
+export const filterByUser = (data: ISession): { user: Prisma.UserWhereInput } => {
+  return { user: { email: data.email } };
 };
 
 export const paginate = <T = unknown>(data: T[], page: number, total: number, per = 10): [T[], IPagination] => {

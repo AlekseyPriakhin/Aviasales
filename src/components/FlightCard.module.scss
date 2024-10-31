@@ -6,11 +6,11 @@
   gap: 4px;
  
   &:global(.g-card) {
-    background: var(--g-color-private-brand-250-solid);
+    // background: colors.$neutral-300;
 
     &:hover {
       cursor: pointer;
-      background: var(--g-color-private-brand-300-solid); 
+      // background: colors.$neutral-400; 
     }
   }
 

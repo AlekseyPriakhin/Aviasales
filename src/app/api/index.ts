@@ -1,4 +1,5 @@
-import { NextRequest } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
+import { getServerAuthSession } from './auth/[...nextauth]/route';
 
 export const PAGE = 1;
 export const PER = 10;
@@ -39,3 +40,9 @@ export const extractPaginationData = (req: NextRequest) => ({
   page: Number(req.nextUrl.searchParams.get('page')) || PAGE,
   per: Number(req.nextUrl.searchParams.get('per')) || PER,
 });
+
+export const authorize = async () => {
+  const session = await getServerAuthSession();
+  if (!session || !session.user) return { error: NextResponse.json({ error: 'Unauthorized' }, { status: 401 }) };
+  return { error: undefined, session: { email: String(session.user.email) } };
+};

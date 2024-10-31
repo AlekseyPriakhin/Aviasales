@@ -102,10 +102,10 @@ export const useCreateInfiniteQuery = <T = any, Params extends IParams = IParams
   const [params, setParams] = useState(purifyObject(initParams));
   const queryKey = [key, purifyObject(params)];
 
-  const [isNothingFound, setNothingFound] = useState<boolean>();
+  const [isNothingFound, setNothingFound] = useState<boolean>(false);
   const [pagination, setPagination] = useState<IPagination>({ page: PAGE, total: 0, count: PER, totalPages: 0 });
   const [isFetchNextPageAvailable, setIsFetchNextPageAvailable] = useState(false);
-  const [normalizedData, setNormalizedData] = useState<T[]>();
+  const [normalizedData, setNormalizedData] = useState<T[]>([]);
 
   const query = useInfiniteQuery({
     queryKey,
@@ -122,7 +122,7 @@ export const useCreateInfiniteQuery = <T = any, Params extends IParams = IParams
   });
 
   useEffect(() => {
-    setNothingFound(query.data?.pages.some(e => e.pagination.total === 0));
+    setNothingFound(query.data?.pages.some(e => e.pagination.total === 0) || false); // TODO почемуто undefined
     setPagination(p => query.data?.pages.at(-1)?.pagination ?? p);
     setIsFetchNextPageAvailable(pagination.page < (query.data?.pages.at(-1)?.pagination.totalPages ?? 1));
     setNormalizedData(query.data?.pages.map(e => e.data).flat() ?? []);

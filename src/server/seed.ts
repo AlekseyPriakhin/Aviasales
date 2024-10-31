@@ -85,9 +85,9 @@ const seedFlights = async () => {
         company: 'Пупа аирлаинс',
         date: new Date('2024-10-28 14:00:00').toISOString(),
         duration: 150,
-        reservedSeatsCount: 45,
+        reservedSeatsCount: 0,
         totalSeatsCount: 190,
-        availableSeatsCount: 145,
+        availableSeatsCount: 190,
         departureAirport: 'Шереметьево',
         departureAirportCode: 'SVO',
         arrivingAirport: 'Пулково',
@@ -98,9 +98,9 @@ const seedFlights = async () => {
         company: 'Лупа аирлаинс',
         date: new Date('2024-10-28 14:00:00').toISOString(),
         duration: 145,
-        reservedSeatsCount: 55,
+        reservedSeatsCount: 0,
         totalSeatsCount: 180,
-        availableSeatsCount: 125,
+        availableSeatsCount: 180,
         arrivingAirport: 'Шереметьево',
         arrivingAirportCode: 'SVO',
         departureAirport: 'Пулково',
@@ -111,21 +111,74 @@ const seedFlights = async () => {
   });
 };
 const seedTickets = async () => {
-  const flight = await prisma.flight.findFirst();
+  const flight = await prisma.flight.findFirst({ include: { ticketClasses: true } });
   const user = await prisma.user.findFirst({ where: { email: 'alex@mail.com' } });
 
   if (!flight || !user) return;
 
+  const ticketClass = await prisma.ticketClass.findFirst({
+    where: { flightId: flight.id },
+    orderBy: { order: 'asc' },
+  });
+
+  if (!ticketClass) return;
+
+  const seatNumber = 1;
+
   await prisma.ticket.create({
     data: {
       createdAt: new Date(),
-      cost: 2500,
-      currency: 'RUB',
-      seat: 25,
-      flightId: flight.id,
+      seat: seatNumber,
+      ticketClassId: ticketClass.id,
       userId: user.id,
     },
   });
+};
+
+const seedTicketClasses = async () => {
+  const flights = await prisma.flight.findMany();
+
+  if (!flights) return;
+
+  for (const flight of flights) {
+    const total = flight.totalSeatsCount;
+    const seatsCount = { f: 15, b: 45, e: total - 60 };
+
+    await prisma.ticketClass.createMany({
+      data: [
+        {
+          name: 'First',
+          cost: 5000,
+          currency: 'RUB',
+          available: seatsCount.f,
+          reserved: 0,
+          total: seatsCount.f,
+          flightId: flight.id,
+          order: 0,
+        },
+        {
+          name: 'Business',
+          cost: 3000,
+          currency: 'RUB',
+          available: seatsCount.b,
+          reserved: 0,
+          total: seatsCount.b,
+          flightId: flight.id,
+          order: 1,
+        },
+        {
+          name: 'Economy',
+          cost: 2000,
+          currency: 'RUB',
+          available: seatsCount.e,
+          reserved: 0,
+          total: seatsCount.e,
+          flightId: flight.id,
+          order: 2,
+        },
+      ],
+    });
+  }
 };
 
 const getSeedConstraints = async () => {
@@ -133,8 +186,9 @@ const getSeedConstraints = async () => {
   const ticket = Boolean(await prisma.ticket.count());
   const route = Boolean(await prisma.route.count());
   const flight = Boolean(await prisma.flight.count());
+  const ticketClasses = Boolean(await prisma.ticketClass.count());
 
-  return { user, ticket, route, flight };
+  return { user, route, flight, ticketClasses, ticket }; // Следить за порядком
 };
 
 const main = async () => {
@@ -145,6 +199,7 @@ const main = async () => {
     ticket: seedTickets,
     flight: seedFlights,
     route: seedRoutes,
+    ticketClasses: seedTicketClasses,
   };
 
   for (const c in seedConstraints) {

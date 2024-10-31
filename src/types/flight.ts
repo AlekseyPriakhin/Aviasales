@@ -1,4 +1,5 @@
 import { IRoute } from '@/types/route';
+import { ITicketClass } from '@/types/ticketClass';
 
 export interface IFlight {
   id: number;
@@ -9,9 +10,11 @@ export interface IFlight {
   departureAirportCode: string;
   arrivingAirport: string;
   arrivingAirportCode: string;
-  route: IRoute;
   routeId: number;
   reservedSeatsCount: number;
   totalSeatsCount: number;
   availableSeatsCount: number;
+
+  route?: IRoute;
+  ticketClasses?: ITicketClass[];
 }

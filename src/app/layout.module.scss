@@ -1,13 +1,11 @@
 .body {
-  display: grid;
-  grid-template-columns: auto;
-  grid-template-rows: 80px auto 120px;
-
-  font-size: 16px;
-  line-height: 24px;
-  font-family: var(--font-geist-mono);
+  display: flex;
+  flex-direction: column;
 }
 
 .main {
-  padding: 12px 0;
+  margin-top: var(--header-height);
+  padding: 36px 0;
+  flex: 1;
+  background: colors.$neutral-100;
 }

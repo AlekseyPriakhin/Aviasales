@@ -1,7 +1,7 @@
 import { useCreateInfiniteQuery, useCreateSingleQuery } from '@/queries';
 
 import type { IFlight } from '@/types/flight';
-import type { IParams } from '@/queries';
+import type { IParams } from '@/app/api';
 
 const URL = '/flights';
 

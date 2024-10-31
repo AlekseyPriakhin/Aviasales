@@ -111,18 +111,31 @@ model Flight {
   availableSeatsCount Int
 
   route Route @relation(fields: [routeId], references: [id])
+  ticketClasses TicketClass[]
+}
+
+model TicketClass {
+  id Int @id @default(autoincrement())
+  name String
+  total Int
+  reserved Int
+  available Int
+  flightId Int
+  currency String
+  cost Float
+  order Int
+
+  flight Flight @relation( fields: [flightId], references: [id])
   tickets Ticket[]
 }
 
 model Ticket {
   id Int @id @default(autoincrement())
   createdAt DateTime
-  currency String
-  cost Float
   seat Int
   userId String
-  flightId Int
+  ticketClassId Int
 
-  flight Flight @relation(fields: [flightId], references: [id])
+  ticketClass TicketClass @relation(fields: [ticketClassId], references: [id])
   user User @relation(fields: [userId], references: [id])
 }

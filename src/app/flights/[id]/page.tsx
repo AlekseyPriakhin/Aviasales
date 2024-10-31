@@ -1,8 +1,5 @@
 'use client';
-import PageContent from '@/components/PageContent/PageContent';
-import PageHeader from '@/components/PageHeader/PageHeader';
-import PageTemplate from '@/templates/PageTemplate/PageTemplate';
-import UIContainer from '@/ui/UIContainer/UIContainer';
+import UIContainer from '@/ui/UIContainer';
 import { useFlight } from '@/queries/flights';
 import { useI18n } from '@/hooks/useI18n';
 import { Button } from '@gravity-ui/uikit';
@@ -23,15 +20,15 @@ const Flight = ({ params: { id } }: IProps) => {
   if (!flight) return <UIContainer> {t('common', 'loading')} </UIContainer>;
 
   return (
-    <PageTemplate>
-      <PageHeader background="accent">
+    <div>
+      <UIContainer>
         {' '}
-        {t('common', 'flight')} {flight.route.from}
+        {t('common', 'flight')} {flight.route?.from}
         {' ---> '}
-        {flight.route.to}
-      </PageHeader>
-      <PageContent background="secondary">
-        {flight.route.description}
+        {flight.route?.to}
+      </UIContainer>
+      <UIContainer>
+        {flight.route?.description}
         <div>
           {flight.availableSeatsCount > 0 ? (
             status === 'unauthenticated' ? (
@@ -43,8 +40,8 @@ const Flight = ({ params: { id } }: IProps) => {
             <span> Места кончились </span>
           )}
         </div>
-      </PageContent>
-    </PageTemplate>
+      </UIContainer>
+    </div>
   );
 };
 
