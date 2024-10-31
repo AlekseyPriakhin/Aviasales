@@ -1,0 +1,17 @@
+.dropdown {
+  display: flex;
+  flex-direction: column;
+  margin-top: 2px;
+  border: 1px solid colors.$border;
+  border-radius: 6px;
+}
+
+.dropdown-item {
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 6px;
+
+  &:hover {
+    background-color: colors.$neutral-300;
+  }
+}

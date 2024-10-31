@@ -1,18 +1,20 @@
 import { IRoute } from '@/types/route';
-import { Currency } from '@/types/ticket';
+import { ITicketClass } from '@/types/ticketClass';
 
 export interface IFlight {
   id: number;
   company: string;
   date: Date;
   duration: number;
-  minCost: number;
-  currency: Currency;
-  fromCode: string;
-  toCode: string;
-  route: IRoute;
+  departureAirport: string;
+  departureAirportCode: string;
+  arrivingAirport: string;
+  arrivingAirportCode: string;
   routeId: number;
   reservedSeatsCount: number;
   totalSeatsCount: number;
   availableSeatsCount: number;
+
+  route?: IRoute;
+  ticketClasses?: ITicketClass[];
 }

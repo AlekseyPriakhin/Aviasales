@@ -1,11 +1,17 @@
-export type Currency = 'EUR' | 'USD' | 'RUB';
+import type { IFlight } from '@/types/flight';
+import type { ITicketClass } from '@/types/ticketClass';
 
 export interface ITicket {
   id: number;
   createdAt: Date;
-  currency: Currency;
-  cost: number;
   seat: number;
-  userId: number;
+  userId: string;
   flightId: number;
+
+  cost: number;
+  currency: ITicketClass['currency'];
+  ticketClass: ITicketClass['name'];
+
+  flight: IFlight;
+  // ticketClass: ITicketClass;
 }

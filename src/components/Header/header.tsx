@@ -1,10 +1,10 @@
 'use client';
-import UIContainer from '@/ui/UIContainer/UIContainer';
+import UIContainer from '@/ui/UIContainer';
 import styles from './header.module.scss';
 import Link from 'next/link';
+import HeaderLoginOrUser from '@/components/Header/headerLoginOrUser';
 import { useI18n } from '@/hooks/useI18n';
-import { useTheme } from '@/hooks/useTheme';
-import { Button } from '@gravity-ui/uikit';
+import { useSession } from 'next-auth/react';
 
 // eslint-disable-next-line camelcase
 type THref = __next_route_internal_types__.RouteImpl<''>;
@@ -15,18 +15,18 @@ interface ILink {
 
 export default function Header() {
   const { t } = useI18n();
-
-  const { switchTheme } = useTheme();
+  const { status } = useSession();
 
   const links: ILink[] = [
     { label: t('routes', '/'), href: '/' },
-    { label: 'вот сюды', href: null },
-    { label: 'вот туды', href: null },
-  ] as const;
+    { label: t('routes', '/flights'), href: '/flights' },
+  ];
+
+  if (status === 'authenticated') links.push({ label: t('routes', '/tickets'), href: '/tickets' });
 
   return (
     <header className={styles['header']}>
-      <UIContainer>
+      <UIContainer className={styles['content']}>
         <div className={styles['links']}>
           {links.map(({ label, href }) => {
             return href ? (
@@ -41,7 +41,9 @@ export default function Header() {
             );
           })}
         </div>
-        <Button onClick={switchTheme}> switch </Button>
+        <div className={styles['actions']}>
+          <HeaderLoginOrUser className={styles['login-or-user']} />
+        </div>
       </UIContainer>
     </header>
   );

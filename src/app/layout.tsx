@@ -1,37 +1,36 @@
-import type { Metadata } from 'next';
-
 import '@/styles/globals.scss';
 import styles from './layout.module.scss';
 
-import { ThemeProvider } from '@gravity-ui/uikit';
-import type { Theme } from '@gravity-ui/uikit';
 import ReactQueryProvider from '@/providers/reactQuery';
+import SessionProvider from '@/providers/SessionProvide';
 import Header from '@/components/Header/header';
-import type { AppTheme } from '@/hooks/useTheme';
+
+import { getServerAuthSession } from '@/app/api/auth/[...nextauth]/route';
+
+import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: 'Aviasales app',
   description: 'SPA development course',
 };
 
-const DEFAULT_THEME: AppTheme = 'dark';
-const DEFAULT_BODY_CLASSNAME = `g-root g-root_theme_${DEFAULT_THEME}`;
-
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const session = await getServerAuthSession();
+
   return (
     <html>
-      <ReactQueryProvider>
-        <body className={[DEFAULT_BODY_CLASSNAME, styles['body']].join(' ')}>
-          <ThemeProvider theme={DEFAULT_THEME}>
+      <SessionProvider session={session}>
+        <ReactQueryProvider>
+          <body className={[styles['body']].join(' ')}>
             <Header />
             <main className={styles['main']}>{children}</main>
-          </ThemeProvider>
-        </body>
-      </ReactQueryProvider>
+          </body>
+        </ReactQueryProvider>
+      </SessionProvider>
     </html>
   );
 }
