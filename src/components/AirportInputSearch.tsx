@@ -48,7 +48,7 @@ const AirportInput = ({ className, label, value, setValue }: IParams) => {
   };
 
   return (
-    <div className={[className].join(' ')}>
+    <div className={[styles['search'], className].join(' ')}>
       <TextField
         ref={input}
         label={label}
@@ -61,7 +61,7 @@ const AirportInput = ({ className, label, value, setValue }: IParams) => {
       <Collapse in={isDropdownShown}>
         <div className={styles['dropdown']}>
           {dictionary
-            .filter(item => item.name.includes(value) || item.tag.includes(value))
+            .filter(item => [item.name, item.tag].join(' ').includes(value))
             .map(item => (
               <div
                 className={styles['dropdown-item']}

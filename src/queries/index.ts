@@ -112,7 +112,7 @@ export const useCreateInfiniteQuery = <T = any, Params extends IParams = IParams
   const query = useInfiniteQuery({
     queryKey,
     queryFn: async ({ pageParam }) => {
-      const { data } = await api.get<IResponseList<T>>(url, { params: { page: pageParam, ...initParams } });
+      const { data } = await api.get<IResponseList<T>>(url, { params: { page: pageParam, ...purifyObject(params) } });
       return data;
     },
     placeholderData: keepPreviousData,
@@ -130,13 +130,16 @@ export const useCreateInfiniteQuery = <T = any, Params extends IParams = IParams
     setNormalizedData(query.data?.pages.map(e => e.data).flat() ?? []);
   }, [query.data, pagination.page]);
 
+  const wrappedSetParams = (newParams = {} as Params) => setParams(old => ({ ...old, ...newParams }));
+
   return {
     queryKey,
     pagination,
     isNothingFound,
     isFetchNextPageAvailable,
+    params,
     ...query,
     data: normalizedData,
-    setParams,
+    setParams: wrappedSetParams,
   };
 };

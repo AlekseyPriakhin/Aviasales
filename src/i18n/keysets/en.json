@@ -10,5 +10,18 @@
     "/": "Root",
     "/flights": "Flights",
     "/tickets": "My Tickets"
+  },
+  "currency": {
+    "RUB": "RUB",
+    "USD": "USD",
+    "EUR": "EUR"
+  },
+  "tickets": {
+    "active": "Active",
+    "elapsed": "Elapsed",
+    "all": "All",
+    "First": "First class",
+    "Business": "Business class",
+    "Economy": "Economy class"
   }
 }

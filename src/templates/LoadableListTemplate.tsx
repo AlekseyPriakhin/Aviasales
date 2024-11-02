@@ -19,12 +19,13 @@ const LoadableListTemplate = <T,>({
   nothingFoundLayout = defaultNothingFoundLayout,
   items,
   itemsLayout,
+  className,
 }: IProps<T>) => {
-  if (isLoading) return loadingLayout;
-
-  if (isNothingFound || !items) return nothingFoundLayout;
-
-  return itemsLayout(items);
+  return (
+    <div className={className}>
+      {isLoading ? loadingLayout : isNothingFound || !items ? nothingFoundLayout : itemsLayout(items)}
+    </div>
+  );
 };
 
 export default LoadableListTemplate;

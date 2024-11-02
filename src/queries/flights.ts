@@ -1,12 +1,12 @@
 import { useCreateInfiniteQuery, useCreateSingleQuery } from '@/queries';
 
 import type { IFlight } from '@/types/flight';
-import type { IParams } from '@/app/api';
+import type { IFlightParams } from '@/app/api/flights/route';
 
 const URL = '/flights';
 
-export const useInfiniteFlights = (params?: IParams) => {
-  const { data, ...query } = useCreateInfiniteQuery<IFlight>({
+export const useInfiniteFlights = (params?: IFlightParams) => {
+  const { data, ...query } = useCreateInfiniteQuery<IFlight, IFlightParams>({
     key: ['flights'],
     url: URL,
     initParams: params,
