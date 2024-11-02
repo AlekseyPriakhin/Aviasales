@@ -6,8 +6,8 @@ export type ISession = {
   email: string;
 };
 
-export const filterByUser = (data: ISession): { user: Prisma.UserWhereInput } => {
-  return { user: { email: data.email } };
+export const filterByUser = (data: ISession): Prisma.UserWhereInput => {
+  return { email: data.email };
 };
 
 export const paginate = <T = unknown>(data: T[], page: number, total: number, per = 10): [T[], IPagination] => {

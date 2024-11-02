@@ -1,8 +1,12 @@
 'use client';
-import { signIn, signOut, useSession } from 'next-auth/react';
-import { ArrowRightFromSquare } from '@gravity-ui/icons';
+import ExitToAppIcon from '@mui/icons-material/ExitToApp';
+import { Avatar, Button, IconButton } from '@mui/material';
+
 import styles from './headerLoginOrUser.module.scss';
-import { Avatar, Button, Icon } from '@gravity-ui/uikit';
+import { deepPurple } from '@mui/material/colors';
+
+import { signIn, signOut, useSession } from 'next-auth/react';
+
 import type { INodeProps } from '@/types';
 
 const HeaderLoginOrUser = ({ className }: INodeProps) => {
@@ -12,20 +16,19 @@ const HeaderLoginOrUser = ({ className }: INodeProps) => {
     <section className={[styles['section'], className].join(' ')}>
       {status === 'authenticated' && data.user?.name ? (
         <div className={styles['user']}>
-          <Avatar
-            size="xl"
-            text={data.user.name[0]}
-          />
-          <Button
-            size="xl"
-            onClick={() => signOut()}>
-            <Icon
-              data={ArrowRightFromSquare}
-              size={18}></Icon>
-          </Button>
+          <Avatar sx={{ bgcolor: deepPurple[500] }}> {data.user.name[0]} </Avatar>
+          <IconButton onClick={() => signOut()}>
+            <ExitToAppIcon color="primary" />
+          </IconButton>
         </div>
       ) : (
-        <Button onClick={() => signIn()}> Войти </Button>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={() => signIn()}>
+          {' '}
+          Войти{' '}
+        </Button>
       )}
     </section>
   );

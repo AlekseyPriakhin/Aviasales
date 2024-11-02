@@ -1,6 +1,5 @@
 'use client';
 import UIContainer from '@/ui/UIContainer';
-import Link from 'next/link';
 
 import { useInfiniteTickets } from '@/queries/tickets';
 
@@ -14,12 +13,9 @@ const Tickets = () => {
       ) : (
         <div style={{ display: 'flex', gap: '12px' }}>
           {tickets?.map(t => (
-            <Link
-              href={`/flights/${t.id}`}
-              key={t.id}>
-              {' '}
+            <span key={t.id}>
               {t.ticketClass} {t.cost}
-            </Link>
+            </span>
           ))}
         </div>
       )}

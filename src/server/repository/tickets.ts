@@ -14,14 +14,17 @@ const filterByStatus = (status: ITicketsParams['status']): Prisma.TicketWhereInp
 
 export const getTickets = async ({ page, per, status = 'active' }: ITicketsParams, session: ISession) => {
   return withDbClient(async client => {
-    const filter: Prisma.TicketWhereInput = { AND: { ...filterByUser(session), ...filterByStatus(status) } };
+    const filter: Prisma.TicketWhereInput = {
+      AND: { user: filterByUser(session), ...filterByStatus(status) },
+    };
+
     const query = () =>
       client.ticket.findMany({
         include: { ticketClass: { include: { flight: { include: { route: true } } } }, user: true },
         ...createPaginationParams(page, per),
-        where: { ...filter },
+        where: filter,
       });
-    const totalQuery = () => client.ticket.count({ where: { ...filter } });
+    const totalQuery = () => client.ticket.count({ where: filter });
 
     return paginateV2({ query, mapper: mapTicket }, totalQuery, page, per);
   });

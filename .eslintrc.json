@@ -4,8 +4,6 @@
     "next/typescript",
     "plugin:@typescript-eslint/recommended",
     "plugin:@tanstack/eslint-plugin-query/recommended",
-    "@gravity-ui/eslint-config",
-    "@gravity-ui/eslint-config/prettier"
   ],
   "plugins": [
     "prettier"

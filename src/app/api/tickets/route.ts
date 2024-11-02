@@ -9,7 +9,7 @@ export interface ITicketsParams extends IParams {
 
 const params = (request: NextRequest): ITicketsParams => ({
   ...extractPaginationData(request),
-  status: request.nextUrl.searchParams.get('status') as ITicketsParams['status'],
+  status: (request.nextUrl.searchParams.get('status') as ITicketsParams['status']) || 'active',
 });
 
 export async function GET(request: NextRequest) {

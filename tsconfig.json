@@ -1,5 +1,4 @@
 {
-  "extends": "@gravity-ui/tsconfig/tsconfig",
   "compilerOptions": {
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,

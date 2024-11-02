@@ -1,8 +1,9 @@
 'use client';
 import UIContainer from '@/ui/UIContainer';
+import { Button } from '@mui/material';
+
 import { useFlight } from '@/queries/flights';
 import { useI18n } from '@/hooks/useI18n';
-import { Button } from '@gravity-ui/uikit';
 import { signIn, useSession } from 'next-auth/react';
 
 interface IProps {
@@ -32,9 +33,13 @@ const Flight = ({ params: { id } }: IProps) => {
         <div>
           {flight.availableSeatsCount > 0 ? (
             status === 'unauthenticated' ? (
-              <Button onClick={() => signIn()}> Авторизоваться </Button>
+              <Button
+                variant="contained"
+                onClick={() => signIn()}>
+                Авторизоваться
+              </Button>
             ) : (
-              <Button view="normal-contrast"> Оформить </Button>
+              <Button variant="contained"> Оформить </Button>
             )
           ) : (
             <span> Места кончились </span>

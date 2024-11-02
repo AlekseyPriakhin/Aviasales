@@ -4,6 +4,7 @@
   flex-direction: column;
   justify-content: flex-start;
   gap: 4px;
+  background: colors.$neutral-200;
  
   &:global(.g-card) {
     // background: colors.$neutral-300;

@@ -1,5 +1,4 @@
 {
-  "extends": ["@gravity-ui/prettier-config"],
   "singleQuote": true,
   "arrowParens": "avoid",
   "printWidth": 120,
