@@ -22,6 +22,7 @@ interface ISingleQueryParams {
   key: string[];
   itemId: string | number;
   url: string;
+  enabled?: boolean;
 }
 //
 
@@ -37,7 +38,7 @@ export const purifyObject = <T extends object = object>(obj: T): T => {
   return res as T;
 };
 
-export const useCreateSingleQuery = <T>({ key, itemId, url }: ISingleQueryParams) => {
+export const useCreateSingleQuery = <T>({ key, enabled = true, itemId, url }: ISingleQueryParams) => {
   const queryKey = [key, itemId];
 
   const query = useQuery({
@@ -45,6 +46,7 @@ export const useCreateSingleQuery = <T>({ key, itemId, url }: ISingleQueryParams
     queryFn: () => api.get<IResponse<T>>(`${url}/${itemId}`),
     select: res => res.data.data,
     placeholderData: keepPreviousData,
+    enabled,
   });
 
   return { ...query, queryKey };

@@ -1,4 +1,4 @@
-import { createPaginationParams, filterByUser, paginateV2, withDbClient } from '@/server/repository';
+import { createPaginationParams, filterByUser, paginate, withDbClient } from '@/server/repository';
 import { MODEL_NAMES } from '@/server/model';
 import { mapTicket } from '@/server/repository/mappers';
 import { Prisma } from '@prisma/client';
@@ -26,6 +26,6 @@ export const getTickets = async ({ page, per, status = 'active' }: ITicketsParam
       });
     const totalQuery = () => client.ticket.count({ where: filter });
 
-    return paginateV2({ query, mapper: mapTicket }, totalQuery, page, per);
+    return paginate({ query, mapper: mapTicket }, totalQuery, page, per);
   });
 };

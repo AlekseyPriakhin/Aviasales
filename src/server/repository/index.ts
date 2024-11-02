@@ -10,19 +10,7 @@ export const filterByUser = (data: ISession): Prisma.UserWhereInput => {
   return { email: data.email };
 };
 
-export const paginate = <T = unknown>(data: T[], page: number, total: number, per = 10): [T[], IPagination] => {
-  return [
-    data,
-    {
-      page,
-      total,
-      totalPages: Math.ceil(total / per),
-      count: data.length,
-    },
-  ];
-};
-
-export const paginateV2 = async <T = unknown, U = unknown>(
+export const paginate = async <T = unknown, U = unknown>(
   {
     query,
     mapper,

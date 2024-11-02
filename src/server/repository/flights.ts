@@ -1,4 +1,4 @@
-import { createPaginationParams, paginateV2, withDbClient } from '@/server/repository';
+import { createPaginationParams, paginate, withDbClient } from '@/server/repository';
 import { mapFlight } from '@/server/repository/mappers';
 import type { IFlight } from '@/types/flight';
 import type { IParams } from '@/app/api';
@@ -9,7 +9,7 @@ export const getFlights = async ({ page, per }: IParams) => {
       client.flight.findMany({ ...createPaginationParams(page, per), include: { route: true, ticketClasses: true } });
     const totalQuery = () => client.flight.count();
 
-    return paginateV2({ query, mapper: mapFlight }, totalQuery, page, per);
+    return paginate({ query, mapper: mapFlight }, totalQuery, page, per);
   });
 };
 
