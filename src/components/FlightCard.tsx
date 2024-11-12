@@ -62,7 +62,7 @@ const FlightCard = ({ flight }: IProps) => {
       </div>
 
       <div className={styles['date-time']}>
-        <UIIcon name="time" size="36px" color="red"/>
+        <UIIcon name="time" />
         <span>
           {startDateTime.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' })} {' - '}
           {arrivingDateTime.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' })}
