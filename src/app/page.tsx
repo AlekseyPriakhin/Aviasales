@@ -35,7 +35,8 @@ const Page = () => {
   const [to, setTo] = useState('');
   const [date, setDate] = useState<string | null>(null);
 
-  const { flights, isLoading, isNothingFound, setParams } = useInfiniteFlights();
+  const { flights, isLoading, isNothingFound, hasNextPage, isFetching, setParams, fetchNextPage } =
+    useInfiniteFlights();
 
   const handleSearch = () => setParams({ from, to, date: date || '' });
 
@@ -69,12 +70,18 @@ const Page = () => {
           Искать
         </Button>
       </div>
-      <LoadableListTemplate
-        isLoading={isLoading}
-        isNothingFound={isNothingFound}
-        items={flights}
-        itemsLayout={flightsLayout}
-      />
+      <section>
+        <div> Результаты поиска: </div>
+        <LoadableListTemplate
+          isLoading={isLoading}
+          isNothingFound={isNothingFound}
+          items={flights}
+          itemsLayout={flightsLayout}
+          hasNextPage={hasNextPage}
+          isFetching={isFetching}
+          onLoadMore={fetchNextPage}
+        />
+      </section>
     </UIContainer>
   );
 };

@@ -1,7 +1,8 @@
+import { Card, Chip } from '@mui/material';
 import UIIcon from '@/ui/UIIcon';
-import { Card } from '@mui/material';
 
 import styles from './FlightCard.module.scss';
+import { useState } from 'react';
 
 import type { IFlight } from '@/types/flight';
 import type { INodeProps } from '@/types';
@@ -11,33 +12,64 @@ interface IProps extends INodeProps {
 }
 
 const FlightCard = ({ flight }: IProps) => {
+  const [hover, setHover] = useState(false);
   const startDateTime = new Date(flight.date);
   const arrivingDateTime = new Date(new Date(flight.date).getTime() + flight.duration * 1000 * 60);
+
+  const startDate = startDateTime.toLocaleDateString('ru-RU', {
+    day: 'numeric',
+    month: 'numeric',
+    year: 'numeric',
+  });
+
+  const arrivingDate = arrivingDateTime.toLocaleDateString('ru-RU', {
+    day: 'numeric',
+    month: 'numeric',
+    year: 'numeric',
+  });
+
+  const date = startDate === arrivingDate ? startDate : `${startDate} - ${arrivingDate}`;
 
   return (
     <Card
       variant="outlined"
-      className={styles['card']}>
-      <span>
-        {flight.route?.from} <span> {flight.departureAirportCode}</span> ---
-        {flight.route?.to} <span> {flight.arrivingAirportCode}</span>
-      </span>
+      className={styles['card']}
+      onMouseEnter={() => setHover(true)}
+      onMouseLeave={() => setHover(false)}>
+      <div className={styles['route']}>
+        <div className={styles['from-to']}>
+          {flight.route?.from}
+          <Chip
+            color="success"
+            variant={hover ? 'filled' : 'outlined'}
+            label={flight.departureAirportCode}
+          />
+        </div>
+
+        <UIIcon name="arrow-right" />
+
+        <div className={styles['from-to']}>
+          {flight.route?.to}
+          <Chip
+            color="info"
+            variant={hover ? 'filled' : 'outlined'}
+            label={flight.arrivingAirportCode}
+          />
+        </div>
+      </div>
       <div className={styles['company']}>
         <span>{flight.company}</span>
       </div>
 
-      <div>
-        <UIIcon
-          size="16px"
-          name="rub"
-        />
-      </div>
-
       <div className={styles['date-time']}>
-        <p>
-          {startDateTime.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' })} -{' '}
+        <UIIcon name="time" size="36px" color="red"/>
+        <span>
+          {startDateTime.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' })} {' - '}
           {arrivingDateTime.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' })}
-        </p>
+        </span>
+
+        <UIIcon name="calendar" />
+        <span>{date}</span>
       </div>
     </Card>
   );

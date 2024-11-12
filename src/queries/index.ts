@@ -8,14 +8,16 @@ import {
 } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import { api } from '@/axios';
-import { PAGE, PER } from '@api/index';
+import { PAGE } from '@api/index';
 
 import type { IPagination, IParams, IResponse, IResponseList } from '@/app/api';
 
+const PER = 12;
 //API Types
 
 interface IUsePaginatedQueryParams {
-  page: number;
+  page?: number;
+  per?: number;
 }
 
 interface ISingleQueryParams {
@@ -55,9 +57,9 @@ export const useCreateSingleQuery = <T>({ key, enabled = true, itemId, url }: IS
 export const useCreatePaginatedQuery = <T, TParams extends IUsePaginatedQueryParams = IUsePaginatedQueryParams>({
   key,
   handler,
-  initParams = {} as TParams,
+  initParams = { page: PAGE, per: PER } as TParams,
 }: IPaginatedQueryParams<T, TParams>) => {
-  const [params, setParams] = useState<TParams>(purifyObject(initParams));
+  const [params, setParams] = useState<TParams>(purifyObject({ per: PER, page: PAGE, ...initParams }));
   const queryKey = [key, purifyObject(initParams)];
 
   const query = useQuery({
@@ -101,7 +103,7 @@ export const useCreateInfiniteQuery = <T = any, Params extends IParams = IParams
   url,
   initParams = {} as Params,
 }: IInfiniteParams<T, Params>) => {
-  const [params, setParams] = useState(purifyObject(initParams));
+  const [params, setParams] = useState(purifyObject({ per: PER, page: PAGE, ...initParams }));
   const queryKey = [key, purifyObject(params)];
 
   const [isNothingFound, setNothingFound] = useState<boolean>(false);
@@ -112,22 +114,24 @@ export const useCreateInfiniteQuery = <T = any, Params extends IParams = IParams
   const query = useInfiniteQuery({
     queryKey,
     queryFn: async ({ pageParam }) => {
-      const { data } = await api.get<IResponseList<T>>(url, { params: { page: pageParam, ...purifyObject(params) } });
+      const { data } = await api.get<IResponseList<T>>(url, { params: { ...purifyObject(params), page: pageParam } });
       return data;
     },
     placeholderData: keepPreviousData,
     initialPageParam: 1,
     getNextPageParam: res => {
-      return res.pagination.page < res.pagination.totalPages ? res.pagination.page + 1 : undefined;
+      return res.pagination.page < res.pagination.totalPages ? res.pagination.page + 1 : null;
     },
     ...options,
   });
 
   useEffect(() => {
-    setNothingFound(query.data?.pages.some(e => e.pagination.total === 0) || false); // TODO почемуто undefined
-    setPagination(p => query.data?.pages.at(-1)?.pagination ?? p);
-    setIsFetchNextPageAvailable(pagination.page < (query.data?.pages.at(-1)?.pagination.totalPages ?? 1));
-    setNormalizedData(query.data?.pages.map(e => e.data).flat() ?? []);
+    if (query.data) {
+      setNothingFound(query.data.pages.some(e => e.pagination.total === 0) || false); // TODO почемуто undefined
+      setPagination(p => query.data.pages.at(-1)?.pagination ?? p);
+      setIsFetchNextPageAvailable(pagination.page < (query.data.pages.at(-1)?.pagination.totalPages ?? 1));
+      setNormalizedData(query.data.pages.map(e => e.data).flat() ?? []);
+    }
   }, [query.data, pagination.page]);
 
   const wrappedSetParams = (newParams = {} as Params) => setParams(old => ({ ...old, ...newParams }));

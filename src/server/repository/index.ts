@@ -41,5 +41,11 @@ export const createPaginationParams = (page = PAGE, per = PER) => ({ skip: per *
 
 export const withDbClient = async <T = unknown>(cb: (client: PrismaClient) => Promise<T>) => {
   const client = new PrismaClient();
-  return cb(client).finally(() => client.$disconnect());
+  return cb(client)
+    .catch(e => {
+      // eslint-disable-next-line no-console
+      console.debug(e);
+      throw e;
+    })
+    .finally(() => client.$disconnect());
 };

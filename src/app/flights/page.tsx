@@ -4,6 +4,8 @@ import FlightCard from '@/components/FlightCard';
 import LoadableListTemplate from '@/templates/LoadableListTemplate';
 import Link from 'next/link';
 
+import styles from './page.module.scss';
+
 import { useInfiniteFlights } from '@/queries/flights';
 
 import type { IFlight } from '@/types/flight';
@@ -23,15 +25,18 @@ const flightsLayout = (flights: IFlight[]) => {
 };
 
 const Flights = () => {
-  const { flights, isLoading, isNothingFound } = useInfiniteFlights();
+  const { flights, isLoading, isNothingFound, hasNextPage, fetchNextPage } = useInfiniteFlights();
 
   return (
     <UIContainer>
       <LoadableListTemplate
+        className={styles['items']}
         isLoading={isLoading}
         isNothingFound={isNothingFound}
         items={flights}
         itemsLayout={flightsLayout}
+        hasNextPage={hasNextPage}
+        onLoadMore={fetchNextPage}
       />
     </UIContainer>
   );

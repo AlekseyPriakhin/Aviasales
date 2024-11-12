@@ -1,10 +1,16 @@
-import type { INodeProps } from '@/types';
 import styles from './UIICon.module.scss';
+
 import rub from '@/images/icons/rub.svg';
 import usd from '@/images/icons/usd.svg';
 import eur from '@/images/icons/eur.svg';
 
-type IconName = 'rub' | 'usd' | 'euro';
+import CalendarMonthOutlinedIcon from '@mui/icons-material/CalendarMonthOutlined';
+import ArrowRightAltOutlinedIcon from '@mui/icons-material/ArrowRightAltOutlined';
+import AccessTimeOutlinedIcon from '@mui/icons-material/AccessTimeOutlined';
+
+import type { INodeProps } from '@/types';
+
+type IconName = 'rub' | 'usd' | 'euro' | 'calendar' | 'arrow-right' | 'time';
 
 interface IProps extends INodeProps {
   size?: string;
@@ -12,19 +18,24 @@ interface IProps extends INodeProps {
   color?: string;
 }
 
-const nameIcon = {
+const nameComponentMap = {
+  calendar: CalendarMonthOutlinedIcon,
+  'arrow-right': ArrowRightAltOutlinedIcon,
+  time: AccessTimeOutlinedIcon,
   euro: eur,
   rub,
   usd,
 } as const satisfies Record<IconName, any>;
 
-const UIIcon = ({ size = '24px', name }: IProps) => {
-  const Icon = nameIcon[name];
+// const localFileIcons: IconName[] = ['rub', 'euro', 'usd'];
+
+const UIIcon = ({ size = '24px', name, color = '#010' }: IProps) => {
+  const AppIcon = nameComponentMap[name];
 
   return (
-    <Icon
-      style={{ height: size, width: size, fill: '#fff' }}
-      className={styles['icon']}></Icon>
+    <AppIcon
+      style={{ height: size, width: size, color }}
+      className={styles['icon']}></AppIcon>
   );
 };
 
