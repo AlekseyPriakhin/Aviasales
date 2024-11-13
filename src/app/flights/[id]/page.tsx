@@ -1,10 +1,14 @@
 'use client';
-import UIContainer from '@/ui/UIContainer';
-import { Button } from '@mui/material';
+import UIPageHeader from '@/ui/UIPageHeader';
+import UIPageContent from '@/ui/UIPageContent';
+import UIIcon from '@/ui/UIIcon';
+import FlightClasses from '@/components/FlightClasses';
+
+import styles from './page.module.scss';
 
 import { useFlight } from '@/queries/flights';
 import { useI18n } from '@/hooks/useI18n';
-import { signIn, useSession } from 'next-auth/react';
+import { useInfiniteTickets } from '@/queries/tickets';
 
 interface IProps {
   params: {
@@ -15,38 +19,30 @@ interface IProps {
 const Flight = ({ params: { id } }: IProps) => {
   const { t } = useI18n();
   const { flight } = useFlight(id);
+  const { tickets } = useInfiniteTickets({ flightId: id });
 
-  const { status } = useSession();
+  if (!flight) return <UIPageContent> {t('common', 'loading')} </UIPageContent>;
 
-  if (!flight) return <UIContainer> {t('common', 'loading')} </UIContainer>;
+  const { ticketClasses = [] } = flight;
 
   return (
-    <div>
-      <UIContainer>
-        {' '}
-        {t('common', 'flight')} {flight.route?.from}
-        {' ---> '}
-        {flight.route?.to}
-      </UIContainer>
-      <UIContainer>
-        {flight.route?.description}
-        <div>
-          {flight.availableSeatsCount > 0 ? (
-            status === 'unauthenticated' ? (
-              <Button
-                variant="contained"
-                onClick={() => signIn()}>
-                Авторизоваться
-              </Button>
-            ) : (
-              <Button variant="contained"> Оформить </Button>
-            )
-          ) : (
-            <span> Места кончились </span>
-          )}
-        </div>
-      </UIContainer>
-    </div>
+    <>
+      <UIPageHeader>
+        <h1>
+          <span className={styles['title-content']}>
+            {t('common', 'flight')} <UIIcon name="arrow-right" /> {flight.route?.from}{' '}
+          </span>
+        </h1>
+        <p> {flight.route?.description}</p>
+      </UIPageHeader>
+      <UIPageContent>
+        <FlightClasses
+          ticketClasses={ticketClasses}
+          tickets={tickets}
+          flightId={id}
+        />
+      </UIPageContent>
+    </>
   );
 };
 

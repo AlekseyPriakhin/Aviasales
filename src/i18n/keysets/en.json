@@ -4,7 +4,8 @@
     "clickButton": "click me",
     "loadMore": "Load more",
     "loading": "Loading...",
-    "flight": "TODO"
+    "flight": "TODO",
+    "authorizeAction": "Authorize"
   },
   "routes": {
     "/": "Root",
@@ -23,5 +24,15 @@
     "First": "First class",
     "Business": "Business class",
     "Economy": "Economy class"
+  },
+  "flightPage": {
+    "over": "Seats are over",
+    "book": "Book",
+    "booked": "Booked",
+    "totalSeats": "Total",
+    "availableSeats": "Available",
+    "chooseSeat": "Choose seat",
+    "chooseSeatAction": "Choose seat",
+    "notChosen": "Not chosen"
   }
 }

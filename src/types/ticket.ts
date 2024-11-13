@@ -7,6 +7,7 @@ export interface ITicket {
   seat: number;
   userId: string;
   flightId: number;
+  ticketClassId: number;
 
   cost: number;
   currency: ITicketClass['currency'];
@@ -14,4 +15,11 @@ export interface ITicket {
 
   flight: IFlight;
   // ticketClass: ITicketClass;
+}
+
+export interface ISeat {
+  seat: number;
+  flightId: number;
+  ticketClassId: number;
+  ticketClass: ITicketClass['name'];
 }

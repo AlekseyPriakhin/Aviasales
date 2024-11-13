@@ -5,6 +5,12 @@ import { Prisma } from '@prisma/client';
 import type { ITicketsParams } from '@api/tickets/route';
 import type { ISession } from '@/server/repository';
 
+const filterByFlight = (flightId?: number): Prisma.TicketWhereInput => {
+  if (!flightId) return {};
+
+  return { ticketClass: { flightId } };
+};
+
 const filterByStatus = (status: ITicketsParams['status']): Prisma.TicketWhereInput => {
   const date: Prisma.DateTimeFilter<typeof MODEL_NAMES.FLIGHT> =
     status === 'all' ? {} : status === 'active' ? { gte: new Date() } : { lte: new Date() };
@@ -12,10 +18,10 @@ const filterByStatus = (status: ITicketsParams['status']): Prisma.TicketWhereInp
   return { ticketClass: { flight: { date } } };
 };
 
-export const getTickets = async ({ page, per, status = 'active' }: ITicketsParams, session: ISession) => {
+export const getTickets = async ({ page, per, flightId: id, status = 'active' }: ITicketsParams, session: ISession) => {
   return withDbClient(async client => {
     const filter: Prisma.TicketWhereInput = {
-      AND: { user: filterByUser(session), ...filterByStatus(status) },
+      AND: { user: filterByUser(session), ...filterByStatus(status), ...filterByFlight(id) },
     };
 
     const query = () =>

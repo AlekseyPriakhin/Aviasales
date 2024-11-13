@@ -1,0 +1,34 @@
+@use '@/styles/fonts.scss' as fonts;
+
+.container.container {
+  padding-top: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 48px;
+}
+
+.class-section {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  column-gap: 2px; 
+  row-gap: 6px;
+}
+
+.seat {
+  border: 1px solid transparent;
+
+  &:hover {
+    border: 1px solid colors.$border;
+  }
+}
+
+.selected {
+  @include fonts.default;
+}
+
+.title {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  border-bottom: 1px solid colors.$border;
+}

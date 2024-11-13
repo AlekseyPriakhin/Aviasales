@@ -9,8 +9,9 @@ import ArrowRightAltOutlinedIcon from '@mui/icons-material/ArrowRightAltOutlined
 import AccessTimeOutlinedIcon from '@mui/icons-material/AccessTimeOutlined';
 
 import type { INodeProps } from '@/types';
+import { Currency } from '@/types/ticketClass';
 
-type IconName = 'rub' | 'usd' | 'euro' | 'calendar' | 'arrow-right' | 'time';
+type IconName = Currency | 'calendar' | 'arrow-right' | 'time';
 
 interface IProps extends INodeProps {
   size?: string;
@@ -22,9 +23,9 @@ const nameComponentMap = {
   calendar: CalendarMonthOutlinedIcon,
   'arrow-right': ArrowRightAltOutlinedIcon,
   time: AccessTimeOutlinedIcon,
-  euro: eur,
-  rub,
-  usd,
+  EUR: eur,
+  RUB: rub,
+  USD: usd,
 } as const satisfies Record<IconName, any>;
 
 // const localFileIcons: IconName[] = ['rub', 'euro', 'usd'];

@@ -4,7 +4,8 @@
     "clickButton": "Нажми на меня",
     "loadMore": "Показать еще",
     "loading": "Загрузка...",
-    "flight": "Рейс"
+    "flight": "Рейс",
+    "authorizeAction": "Авторизоваться"
   },
   "routes": {
     "/": "Главная",
@@ -23,6 +24,17 @@
     "First": "Первый класс",
     "Business": "Бизнес класс",
     "Economy": "Эконом класс"
+  },
+  "flightPage": {
+    "over": "Места кончились",
+    "book": "Оформить",
+    "chooseSeatAction": "Выбрать место",
+    "selectedSeat": "Выбрано место - {{seat}}, {{name}}",
+    "booked": "Уже оформлен",
+    "totalSeats": "Всего мест - {{total}}",
+    "availableSeats": "Доступно мест - {{available}}",
+    "chooseSeat": "Выбор места",
+    "notChosen": "Место не выбрано"
   }
 
 }

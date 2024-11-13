@@ -22,9 +22,10 @@ interface IUsePaginatedQueryParams {
 
 interface ISingleQueryParams {
   key: string[];
-  itemId: string | number;
+  itemId?: string | number;
   url: string;
   enabled?: boolean;
+  initParams?: IParams;
 }
 //
 
@@ -40,12 +41,13 @@ export const purifyObject = <T extends object = object>(obj: T): T => {
   return res as T;
 };
 
-export const useCreateSingleQuery = <T>({ key, enabled = true, itemId, url }: ISingleQueryParams) => {
-  const queryKey = [key, itemId];
+export const useCreateSingleQuery = <T>({ key, enabled = true, itemId, url, initParams }: ISingleQueryParams) => {
+  const queryKey: any[] = [key, itemId];
+  if (initParams) queryKey.push(purifyObject(initParams));
 
   const query = useQuery({
     queryKey,
-    queryFn: () => api.get<IResponse<T>>(`${url}/${itemId}`),
+    queryFn: () => api.get<IResponse<T>>(itemId ? `${url}/${itemId}` : url, { params: initParams }),
     select: res => res.data.data,
     placeholderData: keepPreviousData,
     enabled,
