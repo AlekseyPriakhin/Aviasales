@@ -15,9 +15,10 @@ interface IProps extends INodeProps {
   ticketClasses: ITicketClass[];
   tickets: ITicket[];
   flightId: number;
+  onBook: (data: { ticketClass: ITicketClass; seat?: number }) => void;
 }
 
-const FlightClasses = ({ ticketClasses, tickets, flightId }: IProps) => {
+const FlightClasses = ({ ticketClasses, tickets, flightId, onBook }: IProps) => {
   const [open, setOpen] = useState(false);
   const { t } = useI18n();
 
@@ -51,7 +52,8 @@ const FlightClasses = ({ ticketClasses, tickets, flightId }: IProps) => {
             <AuthorizableButton>
               <Button
                 variant="contained"
-                disabled={bookedClasses.includes(tc.name)}>
+                disabled={bookedClasses.includes(tc.name)}
+                onClick={() => onBook({ ticketClass: tc })}>
                 {bookedClasses.includes(tc.name) ? t('flightPage', 'booked') : t('flightPage', 'book')}
               </Button>
             </AuthorizableButton>

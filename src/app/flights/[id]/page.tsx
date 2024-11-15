@@ -8,7 +8,7 @@ import styles from './page.module.scss';
 
 import { useFlight } from '@/queries/flights';
 import { useI18n } from '@/hooks/useI18n';
-import { useInfiniteTickets } from '@/queries/tickets';
+import { useCreateTicket, useInfiniteTickets } from '@/queries/tickets';
 
 interface IProps {
   params: {
@@ -18,8 +18,10 @@ interface IProps {
 
 const Flight = ({ params: { id } }: IProps) => {
   const { t } = useI18n();
+
   const { flight } = useFlight(id);
   const { tickets } = useInfiniteTickets({ flightId: id });
+  const { createTicket } = useCreateTicket();
 
   if (!flight) return <UIPageContent> {t('common', 'loading')} </UIPageContent>;
 
@@ -40,6 +42,11 @@ const Flight = ({ params: { id } }: IProps) => {
           ticketClasses={ticketClasses}
           tickets={tickets}
           flightId={id}
+          onBook={({ ticketClass, seat }) => {
+            createTicket({
+              params: { flightId: id, ticketClass: ticketClass.name, ticketClassId: ticketClass.id, seat },
+            });
+          }}
         />
       </UIPageContent>
     </>

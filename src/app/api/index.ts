@@ -46,3 +46,8 @@ export const authorize = async () => {
   if (!session || !session.user) return { error: NextResponse.json({ error: 'Unauthorized' }, { status: 401 }) };
   return { error: undefined, session: { email: String(session.user.email) } };
 };
+
+export const extractBody = async <T = unknown>(request: NextRequest) => {
+  const res = (await request.json()) as { params: T };
+  return res.params;
+};

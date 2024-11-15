@@ -1,9 +1,24 @@
-import { Prisma, PrismaClient } from '@prisma/client';
+import { Prisma, PrismaClient, User } from '@prisma/client';
 import { PAGE, PER } from '@api/index';
 import type { IPagination } from '@api/index';
 
 export type ISession = {
   email: string;
+};
+
+export type IError = {
+  message: string;
+  code?: number;
+};
+
+export const getUserBySession = async (
+  client: PrismaClient,
+  session: ISession,
+): Promise<[User | null, IError | null]> => {
+  const user = await client.user.findFirst({ where: { email: session.email } });
+  if (user === null) return [null, { message: 'User not found', code: 403 }];
+
+  return [user, null];
 };
 
 export const filterByUser = (data: ISession): Prisma.UserWhereInput => {

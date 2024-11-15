@@ -2,15 +2,21 @@ import {
   InfiniteData,
   QueryKey,
   UseInfiniteQueryOptions,
+  UseMutationOptions,
   keepPreviousData,
   useInfiniteQuery,
+  useMutation,
   useQuery,
+  useQueryClient,
 } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import { api } from '@/axios';
 import { PAGE } from '@api/index';
 
 import type { IPagination, IParams, IResponse, IResponseList } from '@/app/api';
+import type { AxiosResponse } from 'axios';
+import type { RecursivePartial } from '@/helpers/utils';
+import type { IIdentifiable } from '@/types';
 
 const PER = 12;
 //API Types
@@ -148,4 +154,63 @@ export const useCreateInfiniteQuery = <T = any, Params extends IParams = IParams
     data: normalizedData,
     setParams: wrappedSetParams,
   };
+};
+
+export type OnMutateHandler<Out = unknown, In = unknown> = Pick<
+  UseMutationOptions<Out, unknown, In, unknown>,
+  'onSuccess' | 'onError' | 'onSettled'
+>;
+
+interface IMutationParams<Out = unknown, In = unknown> {
+  url: string;
+  method: 'post' | 'delete' | 'put';
+  options?: OnMutateHandler<AxiosResponse<Out>, In>;
+}
+
+export const useCreateMutation = <Out = unknown, In = unknown, Local extends IIdentifiable = IIdentifiable>({
+  url,
+  method,
+  options,
+}: IMutationParams<Out, In>) => {
+  const handler = (params: In) => api[method]<Out>(url, { params });
+
+  const query = useMutation({
+    mutationFn: handler,
+    onSuccess: v => v.data,
+    ...options,
+  });
+
+  const queryClient = useQueryClient();
+
+  const updateItem = (queryKey: any[], newData: Partial<Local> | IResponse<Local>) => {
+    queryClient.setQueryData(queryKey, (previous?: IResponse<Local>) => {
+      if (previous) return { data: { ...previous?.data, ...newData } };
+    });
+  };
+
+  const updateInfinityItem = (queryKey: any[], itemId: number | string, newData: RecursivePartial<Local>) => {
+    queryClient.setQueriesData({ queryKey }, (previous?: InfiniteData<IResponseList<Local>>) => {
+      if (previous) {
+        return {
+          pageParams: previous.pageParams,
+          pages: previous.pages.map(({ data, pagination }) => ({
+            data: data.map(d => {
+              if (d.id === itemId)
+                return {
+                  ...d,
+                  ...newData,
+                };
+              return d;
+            }),
+            pagination,
+          })),
+        };
+      }
+    });
+  };
+
+  const mutationHandler = ({ params, options }: { params: In; options?: OnMutateHandler<AxiosResponse<Out>, In> }) =>
+    query.mutate(params, options);
+
+  return { ...query, queryClient, mutate: mutationHandler, updateItem, updateInfinityItem };
 };

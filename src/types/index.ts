@@ -1,8 +1,10 @@
+export type ID = string | number;
+
+export interface IIdentifiable<T extends ID = ID> {
+  id: T;
+}
+
 export interface INodeProps {
   children?: React.ReactNode;
   className?: string;
 }
-
-export type ArrayElement<ArrayType extends readonly unknown[]> = ArrayType extends readonly (infer ElementType)[]
-  ? ElementType
-  : never;
