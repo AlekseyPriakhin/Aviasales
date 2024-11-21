@@ -27,7 +27,7 @@ interface IUsePaginatedQueryParams {
 }
 
 interface ISingleQueryParams {
-  key: string[];
+  key: any[];
   itemId?: string | number;
   url: string;
   enabled?: boolean;
@@ -48,7 +48,7 @@ export const purifyObject = <T extends object = object>(obj: T): T => {
 };
 
 export const useCreateSingleQuery = <T>({ key, enabled = true, itemId, url, initParams }: ISingleQueryParams) => {
-  const queryKey: any[] = [key, itemId];
+  const queryKey: any[] = [key];
   if (initParams) queryKey.push(purifyObject(initParams));
 
   const query = useQuery({

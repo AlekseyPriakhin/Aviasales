@@ -1,7 +1,6 @@
 import { createPaginationParams, paginate, withDbClient } from '@/server/repository';
 import { mapFlight } from '@/server/repository/mappers';
 import { Prisma } from '@prisma/client';
-import type { IFlight } from '@/types/flight';
 import type { IFlightParams } from '@/app/api/flights/route';
 import type { IReservedSeatsParams } from '@/app/api/flights/[id]/reserved/route';
 import type { ISeat } from '@/types/ticket';
@@ -35,7 +34,7 @@ export const getFlights = async ({ page, per, to = '', date = '', from = '' }: I
 };
 
 export const getFlight = async (id: number) => {
-  return withDbClient<IFlight | null>(async client => {
+  return withDbClient(async client => {
     const flight = await client.flight.findFirst({ where: { id }, include: { route: true, ticketClasses: true } });
 
     if (!flight) return null;

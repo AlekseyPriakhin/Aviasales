@@ -1,10 +1,15 @@
-import { createPaginationParams, filterByUser, getUserBySession, paginate, withDbClient } from '@/server/repository';
-import { MODEL_NAMES } from '@/server/model';
-import { mapTicket } from '@/server/repository/mappers';
 import { Prisma } from '@prisma/client';
+
+import { createPaginationParams, filterByUser, getUserBySession, paginate, withDbClient } from '@/server/repository';
+import { mapTicket } from '@/server/repository/mappers';
+
+import { MODEL_NAMES } from '@/server/model';
+import { getNextSeat, validateSeat } from '@/server/model/ticket';
+import { updateCounters } from '@/server/model/ticketClass';
+
 import type { ITicketCreateParams, ITicketsParams } from '@api/tickets/route';
-import type { IError, ISession } from '@/server/repository';
-import { getNextSeat, validateSeat } from '../model/ticket';
+import type { TError, ISession } from '@/server/repository';
+import type { ITicket } from '@/types/ticket';
 
 const filterByFlight = (flightId?: number): Prisma.TicketWhereInput => {
   if (!flightId) return {};
@@ -37,42 +42,48 @@ export const getTickets = async ({ page, per, flightId: id, status = 'active' }:
   });
 };
 
-export const create = (
-  { ticketClassId, ticketClass, seat }: ITicketCreateParams,
-  session: ISession,
-): IError | unknown => {
-  return withDbClient(async client => {
-    if (seat) {
-      const otherFlightTickets = await client.ticket.findMany({
-        where: {
-          AND: {
-            ticketClassId,
-            ticketClass: { name: ticketClass },
-          },
+export const create = ({ ticketClassId, flightId, ticketClass, seat }: ITicketCreateParams, session: ISession) => {
+  return withDbClient<[ITicket | null, TError]>(async client => {
+    const [user, error] = await getUserBySession(client, session);
+    if (error || !user) return [null, error];
+
+    const otherFlightTickets = await client.ticket.findMany({
+      where: {
+        AND: {
+          ticketClassId,
+          ticketClass: { name: ticketClass, flightId },
         },
-        include: { ticketClass: true },
-      });
+      },
+      include: { ticketClass: true },
+    });
 
-      const [isValid, error] = validateSeat(seat, ticketClass, otherFlightTickets);
+    const ticketClasses = await client.ticketClass.findMany({ where: { flightId } });
 
-      if (!isValid) return error;
+    let seatNumber = seat;
+    if (!seatNumber) {
+      const [nextSeat, nextSeatError] = getNextSeat(ticketClass, otherFlightTickets, ticketClasses);
+
+      if (nextSeatError) return [null, nextSeatError];
+      seatNumber = nextSeat;
     }
 
-    const [user, error] = await getUserBySession(client, session);
-    if (error || !user) return error;
-
-    // const seatNumber = getNextSeat(ticketClass, otherFlightTickets, await client.ticketClass.findMany())[0];
+    const [isValid, seatError] = validateSeat(seatNumber, ticketClass, otherFlightTickets, ticketClasses);
+    if (seatError || !isValid) return [null, seatError];
 
     const ticket = await client.ticket.create({
       data: {
         createdAt: new Date(),
-        seat: seat as number,
+        seat: seatNumber,
         ticketClassId,
         userId: user.id,
       },
       include: { ticketClass: { include: { flight: { include: { route: true } } } } },
     });
 
-    return mapTicket(ticket);
+    if (!ticket) return [null, { message: 'Ticket not created', code: 500 }];
+
+    await client.ticketClass.update({ where: { id: ticketClassId }, data: updateCounters() });
+
+    return [mapTicket(ticket), null];
   });
 };

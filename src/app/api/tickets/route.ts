@@ -1,6 +1,6 @@
 import { authorize, extractBody, extractPaginationData, wrapToResponse } from '@api/index';
 import { NextRequest, NextResponse } from 'next/server';
-import { getTickets } from '@/server/repository/tickets';
+import { getTickets, create as bookTicket } from '@/server/repository/tickets';
 
 import type { IParams } from '@api/index';
 import type { TicketClassName } from '@/types/ticketClass';
@@ -18,8 +18,8 @@ const params = (request: NextRequest): ITicketsParams => ({
 });
 
 export async function GET(request: NextRequest) {
-  const { error, session } = await authorize();
-  if (error) return error;
+  const [session, error] = await authorize();
+  if (error || !session) return error;
 
   const [data, pagination] = await getTickets(params(request), session);
 
@@ -34,11 +34,13 @@ export interface ITicketCreateParams {
 }
 
 export async function POST(request: NextRequest) {
-  const { error, session } = await authorize();
-  if (error) return error;
+  const [session, authError] = await authorize();
+  if (authError || !session) return authError;
 
-  const d = await extractBody<ITicketCreateParams>(request);
-  console.log(d);
+  const data = await extractBody<ITicketCreateParams>(request);
 
-  return NextResponse.json({ result: 'success' });
+  const [ticket, error] = await bookTicket(data, session);
+  if (error || !ticket) return NextResponse.json(error, { status: 400 });
+
+  return NextResponse.json(wrapToResponse(ticket));
 }

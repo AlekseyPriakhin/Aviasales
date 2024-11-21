@@ -1,5 +1,6 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest } from 'next/server';
 import { getServerAuthSession } from './auth/[...nextauth]/route';
+import { IError } from '@/server/repository';
 
 export const PAGE = 1;
 export const PER = 10;
@@ -41,10 +42,10 @@ export const extractPaginationData = (req: NextRequest) => ({
   per: Number(req.nextUrl.searchParams.get('per')) || PER,
 });
 
-export const authorize = async () => {
+export const authorize = async (): Promise<[{ email: string } | null, IError | null]> => {
   const session = await getServerAuthSession();
-  if (!session || !session.user) return { error: NextResponse.json({ error: 'Unauthorized' }, { status: 401 }) };
-  return { error: undefined, session: { email: String(session.user.email) } };
+  if (!session || !session.user) return [null, { message: 'Not authorized', code: 401 }];
+  return [{ email: String(session.user.email) }, null];
 };
 
 export const extractBody = async <T = unknown>(request: NextRequest) => {

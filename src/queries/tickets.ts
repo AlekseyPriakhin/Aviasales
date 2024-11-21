@@ -19,11 +19,11 @@ export const useInfiniteTickets = (params?: ITicketsParams) => {
   return { tickets: data, ...query };
 };
 
-export const useCreateTicket = () => {
+export const useBookTicket = () => {
   const { mutate, ...query } = useCreateMutation<ITicket, ITicketCreateParams, ITicket>({
     url: URL,
     method: 'post',
   });
 
-  return { createTicket: mutate, ...query };
+  return { bookTicket: mutate, ...query };
 };

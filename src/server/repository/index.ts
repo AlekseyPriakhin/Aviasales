@@ -6,17 +6,16 @@ export type ISession = {
   email: string;
 };
 
-export type IError = {
+export interface IError {
   message: string;
   code?: number;
-};
+}
 
-export const getUserBySession = async (
-  client: PrismaClient,
-  session: ISession,
-): Promise<[User | null, IError | null]> => {
+export type TError = IError | IError[] | null;
+
+export const getUserBySession = async (client: PrismaClient, session: ISession): Promise<[User | null, TError]> => {
   const user = await client.user.findFirst({ where: { email: session.email } });
-  if (user === null) return [null, { message: 'User not found', code: 403 }];
+  if (user === null) return [null, { message: 'User not found', code: 404 }];
 
   return [user, null];
 };
