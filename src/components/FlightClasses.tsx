@@ -9,7 +9,7 @@ import type { INodeProps } from '@/types';
 import type { ITicketClass } from '@/types/ticketClass';
 import type { ITicket } from '@/types/ticket';
 
-interface IProps extends INodeProps {
+export interface IProps extends INodeProps {
   ticketClasses: ITicketClass[];
   tickets: ITicket[];
   onBook: (data: { ticketClass: ITicketClass; seat?: number }) => void;

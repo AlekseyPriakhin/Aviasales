@@ -1,5 +1,7 @@
 const flights = Object.assign(() => ['flights'], {
-  flight: (id: number) => ['flight', id],
+  flight: Object.assign((id: number) => ['flight', id], {
+    reserved: (id: number) => ['reservedSeats', id],
+  }),
 });
 
 const tickets = Object.assign(() => ['tickets'], {});

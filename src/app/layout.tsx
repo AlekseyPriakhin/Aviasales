@@ -4,6 +4,7 @@ import styles from './layout.module.scss';
 import ReactQueryProvider from '@/providers/reactQuery';
 import SessionProvider from '@/providers/SessionProvide';
 import Header from '@/components/Header/header';
+import NotificationsProvider from '@/providers/NotificationProvider';
 
 import { getServerAuthSession } from '@/app/api/auth/[...nextauth]/route';
 
@@ -23,14 +24,16 @@ export default async function RootLayout({
 
   return (
     <html>
-      <SessionProvider session={session}>
-        <ReactQueryProvider>
-          <body className={[styles['body']].join(' ')}>
-            <Header />
-            <main className={styles['main']}>{children}</main>
-          </body>
-        </ReactQueryProvider>
-      </SessionProvider>
+      <NotificationsProvider>
+        <SessionProvider session={session}>
+          <ReactQueryProvider>
+            <body className={[styles['body']].join(' ')}>
+              <Header />
+              <main className={styles['main']}>{children}</main>
+            </body>
+          </ReactQueryProvider>
+        </SessionProvider>
+      </NotificationsProvider>
     </html>
   );
 }

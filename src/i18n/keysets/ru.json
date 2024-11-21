@@ -5,6 +5,8 @@
     "loadMore": "Показать еще",
     "loading": "Загрузка...",
     "flight": "Рейс",
+    "cancel": "Отменить",
+    "confirm": "Подтвердить",
     "authorizeAction": "Авторизоваться"
   },
   "routes": {

@@ -31,7 +31,7 @@ export const useFlight = (id: number) => {
 
 export const useReservedSeats = (id: number, params?: IReservedSeatsParams) => {
   const { data, ...query } = useCreateSingleQuery<ISeat[]>({
-    key: ['reserved-seats'],
+    key: queryKeys.flights.flight.reserved(id),
     url: `${URL}/${id}/reserved`,
     initParams: params,
   });

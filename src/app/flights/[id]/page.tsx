@@ -12,6 +12,10 @@ import { useFlight } from '@/queries/flights';
 import { useI18n } from '@/hooks/useI18n';
 import { useBookTicket, useInfiniteTickets } from '@/queries/tickets';
 import { useState } from 'react';
+import { useToast } from '@/hooks/useToast';
+
+import type { IProps as IFlightClassesProps } from '@/components/FlightClasses';
+import type { ITicketClass } from '@/types/ticketClass';
 
 interface IProps {
   params: {
@@ -19,17 +23,43 @@ interface IProps {
   };
 }
 
-const Flight = ({ params: { id } }: IProps) => {
-  const { t } = useI18n();
-  const [open, setOpen] = useState(false);
+interface ISelectedSeat {
+  seat: number;
+  ticketClass: ITicketClass;
+}
 
-  const { flight } = useFlight(Number(id));
-  const { tickets } = useInfiniteTickets({ flightId: Number(id) });
-  const { bookTicket } = useBookTicket();
+const Flight = ({ params: { id } }: IProps) => {
+  const { flight, queryKey: flightQueryKey } = useFlight(Number(id));
+  const { tickets, queryKey: ticketsQueryKey } = useInfiniteTickets({ flightId: Number(id) });
+  const { bookTicket, queryClient } = useBookTicket();
+
+  const [open, setOpen] = useState(false);
+  const [selected, setSelected] = useState<ISelectedSeat | null>(null);
+
+  const { t } = useI18n();
+  const { showSuccess } = useToast();
 
   if (!flight) return <UIPageContent> {t('common', 'loading')} </UIPageContent>;
-
   const { ticketClasses = [] } = flight;
+
+  const handleBook: IFlightClassesProps['onBook'] = ({ ticketClass, seat }) => {
+    bookTicket({
+      params: {
+        flightId: Number(id),
+        ticketClass: ticketClass.name,
+        ticketClassId: ticketClass.id,
+        seat,
+      },
+      options: {
+        onSuccess: () => {
+          [flightQueryKey, ticketsQueryKey].forEach(queryKey => {
+            queryClient.invalidateQueries({ queryKey });
+          });
+          showSuccess('Успех!');
+        },
+      },
+    });
+  };
 
   return (
     <>
@@ -42,6 +72,17 @@ const Flight = ({ params: { id } }: IProps) => {
         <p> {flight.route?.description}</p>
       </UIPageHeader>
       <UIPageContent>
+        <div className={styles['seat-selection']}>
+          <span className={styles['selected']}>
+            {selected
+              ? t('flightPage', 'selectedSeat', { seat: selected.seat, name: t('tickets', selected.ticketClass.name) })
+              : t('flightPage', 'notChosen')}
+          </span>
+          <Button
+            onClick={() => handleBook({ ticketClass: selected?.ticketClass as ITicketClass, seat: selected?.seat })}>
+            {t('flightPage', 'book')}
+          </Button>
+        </div>
         <div>
           <Button
             variant="contained"
@@ -53,25 +94,17 @@ const Flight = ({ params: { id } }: IProps) => {
         <FlightClasses
           ticketClasses={ticketClasses}
           tickets={tickets}
-          onBook={({ ticketClass, seat }) => {
-            bookTicket({
-              params: {
-                flightId: Number(id),
-                ticketClass: ticketClass.name,
-                ticketClassId: ticketClass.id,
-                seat,
-              },
-            });
-          }}
+          onBook={handleBook}
         />
       </UIPageContent>
 
       <SeatSelectModal
         open={open}
-        ticketClasses={ticketClasses}
+        flight={flight}
         tickets={tickets}
-        flightId={Number(id)}
+        selectedState={[selected, setSelected]}
         onClose={() => setOpen(false)}
+        onConfirm={() => setOpen(false)}
       />
     </>
   );
