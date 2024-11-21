@@ -1,10 +1,10 @@
 'use client';
+import { Button } from '@mui/material';
 import UIPageHeader from '@/ui/UIPageHeader';
 import UIPageContent from '@/ui/UIPageContent';
 import UIIcon from '@/ui/UIIcon';
-import FlightClasses from '@/components/FlightClasses';
-import SeatSelectModal from '@/components/SeatSelectModal';
-import { Button } from '@mui/material';
+import TicketSelect from '@/components/TicketSelect/TicketSelect';
+import TicketSelectWithSeatModal from '@/components/TicketSelect/TicketSelectWithSeatModal';
 
 import styles from './page.module.scss';
 
@@ -14,7 +14,7 @@ import { useBookTicket, useInfiniteTickets } from '@/queries/tickets';
 import { useState } from 'react';
 import { useToast } from '@/hooks/useToast';
 
-import type { IProps as IFlightClassesProps } from '@/components/FlightClasses';
+import type { IProps as IFlightClassesProps } from '@/components/TicketSelect/TicketSelect';
 import type { ITicketClass } from '@/types/ticketClass';
 
 interface IProps {
@@ -91,14 +91,14 @@ const Flight = ({ params: { id } }: IProps) => {
           </Button>
         </div>
 
-        <FlightClasses
+        <TicketSelect
           ticketClasses={ticketClasses}
           tickets={tickets}
           onBook={handleBook}
         />
       </UIPageContent>
 
-      <SeatSelectModal
+      <TicketSelectWithSeatModal
         open={open}
         flight={flight}
         tickets={tickets}

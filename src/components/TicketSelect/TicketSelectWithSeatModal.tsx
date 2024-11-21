@@ -1,5 +1,5 @@
 import { useI18n } from '@/hooks/useI18n';
-import styles from './SeatSelect.module.scss';
+import styles from './TicketSelectWithSeatModal.module.scss';
 
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
 
@@ -32,7 +32,7 @@ const getSeatsByClass = (seats: ISeat[]): Record<Lowercase<TicketClassName>, ISe
   };
 };
 
-const SeatSelectModal = ({ flight, open, onClose, onConfirm, selectedState }: IProps) => {
+const TicketSelectWithSeatModal = ({ flight, open, onClose, onConfirm, selectedState }: IProps) => {
   const { reservedSeats } = useReservedSeats(flight.id);
   const splittedSeats = getSeatsByClass(reservedSeats);
 
@@ -119,4 +119,4 @@ const SeatSelectModal = ({ flight, open, onClose, onConfirm, selectedState }: IP
   );
 };
 
-export default SeatSelectModal;
+export default TicketSelectWithSeatModal;

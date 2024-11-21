@@ -3,7 +3,7 @@ import UIIcon from '@/ui/UIIcon';
 import { Card, Button } from '@mui/material';
 
 import { useI18n } from '@/hooks/useI18n';
-import styles from './FlightClasses.module.scss';
+import styles from './TicketSelect.module.scss';
 
 import type { INodeProps } from '@/types';
 import type { ITicketClass } from '@/types/ticketClass';
@@ -15,7 +15,7 @@ export interface IProps extends INodeProps {
   onBook: (data: { ticketClass: ITicketClass; seat?: number }) => void;
 }
 
-const FlightClasses = ({ ticketClasses, tickets, onBook }: IProps) => {
+const TicketSelect = ({ ticketClasses, tickets, onBook }: IProps) => {
   const { t } = useI18n();
 
   const bookedClasses = tickets.map(tc => tc.ticketClass);
@@ -52,4 +52,4 @@ const FlightClasses = ({ ticketClasses, tickets, onBook }: IProps) => {
   );
 };
 
-export default FlightClasses;
+export default TicketSelect;
