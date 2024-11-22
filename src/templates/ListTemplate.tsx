@@ -1,5 +1,5 @@
 import { useI18n } from '@/hooks/useI18n';
-import { Button } from '@gravity-ui/uikit';
+import { Button } from '@mui/material';
 
 import styles from './ListTemplate.module.scss';
 
@@ -20,6 +20,7 @@ const ListTemplate = ({ children, listClass, isLoadMoreAvailable, isLoading, onL
       <div className={listClass}>{children}</div>
       {isLoadMoreAvailable && (
         <Button
+          variant="contained"
           disabled={isLoading}
           onClick={onLoadMore}>
           {' '}

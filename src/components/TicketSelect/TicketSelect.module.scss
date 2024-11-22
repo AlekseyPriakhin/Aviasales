@@ -5,10 +5,7 @@
   row-gap: 32px;
 
   @include breakpoints.md {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  @include breakpoints.lg {
+    justify-items: space-between;
     grid-template-columns: repeat(3, 1fr);
   }
 }

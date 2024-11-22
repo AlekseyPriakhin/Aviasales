@@ -6,12 +6,28 @@
   gap: 12px;
 }
 
+.content {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
 .selected {
   @include fonts.default;
 }
 
 .seat-selection {
   display: flex;
-  flex-direction: column;
-  gap: 12px;
+  gap: 16px;
+  align-items: center;
+}
+
+.selected-data {
+  padding: 4px;
+  border-radius: 2px;
+  &:hover {
+    cursor: pointer;
+    background: colors.$neutral-300;
+  }
 }

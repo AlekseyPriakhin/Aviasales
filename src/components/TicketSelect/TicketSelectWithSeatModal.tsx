@@ -1,8 +1,9 @@
-import { useI18n } from '@/hooks/useI18n';
-import styles from './TicketSelectWithSeatModal.module.scss';
-
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
 
+import styles from './TicketSelectWithSeatModal.module.scss';
+
+import { useState } from 'react';
+import { useI18n } from '@/hooks/useI18n';
 import { useReservedSeats } from '@/queries/flights';
 
 import { getSkipByTicketClass } from '@/helpers';
@@ -24,40 +25,46 @@ interface IProps extends INodeProps {
   onConfirm: () => void;
 }
 
-const getSeatsByClass = (seats: ISeat[]): Record<Lowercase<TicketClassName>, ISeat[]> => {
+const getSeatsByClass = (seats: ISeat[]): Record<TicketClassName, ISeat[]> => {
   return {
-    first: seats.filter(s => s.ticketClass === 'First'),
-    business: seats.filter(s => s.ticketClass === 'Business'),
-    economy: seats.filter(s => s.ticketClass === 'Economy'),
+    First: seats.filter(s => s.ticketClass === 'First'),
+    Business: seats.filter(s => s.ticketClass === 'Business'),
+    Economy: seats.filter(s => s.ticketClass === 'Economy'),
   };
 };
 
-const TicketSelectWithSeatModal = ({ flight, open, onClose, onConfirm, selectedState }: IProps) => {
+const TicketSelectWithSeatModal = ({ flight, tickets, open, onClose, onConfirm, selectedState }: IProps) => {
+  const { t } = useI18n();
+
   const { reservedSeats } = useReservedSeats(flight.id);
   const splittedSeats = getSeatsByClass(reservedSeats);
 
   const skip = getSkipByTicketClass(flight);
 
   const [selected, setSelected] = selectedState;
-  const { t } = useI18n();
+  const [localSelected, setLocalSelected] = useState(selected);
 
   const state = [
     {
       ticketClass: flight.ticketClasses?.find(tc => tc.name === 'First'),
-      reserved: splittedSeats.first,
-      first: skip.First,
+      reserved: splittedSeats.First,
+      skip: skip.First,
     },
     {
       ticketClass: flight.ticketClasses?.find(tc => tc.name === 'Business'),
-      reserved: splittedSeats.business,
-      first: skip.Business,
+      reserved: splittedSeats.Business,
+      skip: skip.Business,
     },
     {
       ticketClass: flight.ticketClasses?.find(tc => tc.name === 'Economy'),
-      reserved: splittedSeats.economy,
-      first: skip.Economy,
+      reserved: splittedSeats.Economy,
+      skip: skip.Economy,
     },
   ] as const satisfies Array<unknown>;
+
+  const selectedData = localSelected
+    ? t('flightPage', 'selectedSeat', { seat: localSelected.seat, name: t('tickets', localSelected.ticketClass.name) })
+    : t('flightPage', 'notChosen');
 
   return (
     <Dialog
@@ -66,14 +73,10 @@ const TicketSelectWithSeatModal = ({ flight, open, onClose, onConfirm, selectedS
       onClose={onClose}>
       <DialogTitle className={styles['title']}>
         {t('flightPage', 'chooseSeat')}
-        <span className={styles['selected']}>
-          {selected
-            ? t('flightPage', 'selectedSeat', { seat: selected.seat, name: t('tickets', selected.ticketClass.name) })
-            : t('flightPage', 'notChosen')}
-        </span>
+        <span className={styles['selected']}>{selectedData}</span>
       </DialogTitle>
       <DialogContent className={styles['container']}>
-        {state.map(({ ticketClass, reserved, first }) => {
+        {state.map(({ ticketClass, reserved, skip }) => {
           if (ticketClass) {
             return (
               <div key={ticketClass.id}>
@@ -83,17 +86,20 @@ const TicketSelectWithSeatModal = ({ flight, open, onClose, onConfirm, selectedS
                     .fill(0)
                     .map((_, i) => (
                       <Button
-                        key={first + i}
+                        key={skip + i}
                         size="small"
                         variant={
-                          selected?.seat === first + i && selected.ticketClass.name === ticketClass.name
+                          localSelected?.seat === skip + i && localSelected.ticketClass.name === ticketClass.name
                             ? 'contained'
                             : 'outlined'
                         }
                         className={[styles['seat']].join(' ')}
-                        disabled={reserved.some(s => s.seat === first + i)}
-                        onClick={() => setSelected({ ticketClass, seat: first + i })}>
-                        {first + i}
+                        disabled={
+                          tickets.some(t => t.ticketClass === ticketClass.name) ||
+                          reserved.some(s => s.seat === skip + i)
+                        }
+                        onClick={() => setLocalSelected({ ticketClass, seat: skip + i })}>
+                        {skip + i}
                       </Button>
                     ))}
                 </div>
@@ -111,7 +117,7 @@ const TicketSelectWithSeatModal = ({ flight, open, onClose, onConfirm, selectedS
         <Button
           variant="contained"
           color="success"
-          onClick={onConfirm}>
+          onClick={() => (setSelected(localSelected), onConfirm())}>
           {t('common', 'confirm')}
         </Button>
       </DialogActions>
