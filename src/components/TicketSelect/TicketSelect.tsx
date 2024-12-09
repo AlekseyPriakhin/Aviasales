@@ -5,6 +5,8 @@ import { Card, Button } from '@mui/material';
 import { useI18n } from '@/hooks/useI18n';
 import styles from './TicketSelect.module.scss';
 
+import { createAppRoute } from '@/helpers/routing';
+
 import type { INodeProps } from '@/types';
 import type { ITicketClass } from '@/types/ticketClass';
 import type { ITicket } from '@/types/ticket';
@@ -17,7 +19,6 @@ export interface IProps extends INodeProps {
 
 const TicketSelect = ({ ticketClasses, tickets, onBook }: IProps) => {
   const { t } = useI18n();
-
   const bookedClasses = tickets.map(tc => tc.ticketClass);
 
   return (
@@ -46,6 +47,13 @@ const TicketSelect = ({ ticketClasses, tickets, onBook }: IProps) => {
               {bookedClasses.includes(tc.name) ? t('flightPage', 'booked') : t('flightPage', 'book')}
             </Button>
           </AuthorizableButton>
+          {bookedClasses.includes(tc.name) && (
+            <Button
+              href={createAppRoute('/tickets', { searchParams: { flightId: String(tc.flightId) } })}
+              variant="contained">
+              {t('flightPage', 'toBookedTickets')}
+            </Button>
+          )}
         </Card>
       ))}
     </div>

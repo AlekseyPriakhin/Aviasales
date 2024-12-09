@@ -7,14 +7,14 @@ import type { IParams } from '@/app/api';
 export interface IFlightParams extends IParams {
   from?: string;
   to?: string;
-  date?: string;
+  date?: string[];
 }
 
 const params = (request: NextRequest): IFlightParams => ({
   ...extractPaginationData(request),
   from: request.nextUrl.searchParams.get('from') || '',
   to: request.nextUrl.searchParams.get('to') || '',
-  date: request.nextUrl.searchParams.get('date') || '',
+  date: request.nextUrl.searchParams.getAll('date') || [],
 });
 
 export async function GET(request: NextRequest) {

@@ -38,7 +38,7 @@ const Page = () => {
   const { flights, isLoading, isNothingFound, hasNextPage, isFetching, setParams, fetchNextPage } =
     useInfiniteFlights();
 
-  const handleSearch = () => setParams({ from, to, date: date || '' });
+  const handleSearch = () => setParams({ from, to, date: date ? [date] : [] });
 
   return (
     <UIContainer className={styles['container']}>

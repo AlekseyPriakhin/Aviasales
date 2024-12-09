@@ -25,6 +25,11 @@
     "Business": "Business class",
     "Economy": "Economy class"
   },
+  "ticketCard": {
+    "toFlight": "To flight",
+    "active": "Active",
+    "elapsed": "Archive"
+  },
   "flightPage": {
     "over": "Seats are over",
     "book": "Book",
@@ -33,6 +38,7 @@
     "availableSeats": "Available",
     "chooseSeat": "Choose seat",
     "chooseSeatAction": "Choose seat",
-    "notChosen": "Not chosen"
+    "notChosen": "Not chosen",
+    "toBookedTickets": "View booked tickets"
   }
 }

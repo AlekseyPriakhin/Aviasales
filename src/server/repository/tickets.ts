@@ -27,7 +27,9 @@ const filterByStatus = (status: ITicketsParams['status']): Prisma.TicketWhereInp
 export const getTickets = async ({ page, per, flightId: id, status = 'active' }: ITicketsParams, session: ISession) => {
   return withDbClient(async client => {
     const filter: Prisma.TicketWhereInput = {
-      AND: { user: filterByUser(session), ...filterByStatus(status), ...filterByFlight(id) },
+      user: filterByUser(session),
+      ...filterByFlight(id),
+      ...filterByStatus(status),
     };
 
     const query = () =>

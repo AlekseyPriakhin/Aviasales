@@ -1,0 +1,17 @@
+import type { IAppSearchParams } from '@/hooks/searchParams';
+
+type NonApiRoute<T extends string> = T extends `/api/${string}` ? never : T;
+
+type AppRoute = NonApiRoute<__next_route_internal_types__.RouteImpl<''>>;
+
+export const createAppRoute = (
+  path: AppRoute,
+  { searchParams = {}, queryParam = '' }: { searchParams?: IAppSearchParams; queryParam?: string },
+) => {
+  const params = new URLSearchParams(searchParams as any).toString();
+
+  const urlBuilder: string[] = [path];
+  if (queryParam) urlBuilder.push(`/${queryParam}`);
+  if (params) urlBuilder.push(`?${params}`);
+  return urlBuilder.join('');
+};

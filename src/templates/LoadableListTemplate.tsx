@@ -34,7 +34,7 @@ const LoadableListTemplate = <T,>({
 }: IProps<T>) => {
   return (
     <div>
-      {isLoading ? (
+      {isLoading || isFetching ? (
         loadingLayout
       ) : isNothingFound || !items ? (
         nothingFoundLayout

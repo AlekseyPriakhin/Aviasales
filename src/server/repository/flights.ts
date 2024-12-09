@@ -5,16 +5,18 @@ import type { IFlightParams } from '@/app/api/flights/route';
 import type { IReservedSeatsParams } from '@/app/api/flights/[id]/reserved/route';
 import type { ISeat } from '@/types/ticket';
 
-const filterByDate = (date: string): Prisma.FlightWhereInput => {
-  if (!date) return {};
-  return { date: { equals: date } };
+const filterByDate = (date: string[]): Prisma.FlightWhereInput => {
+  if (date.length === 2) return { date: { gte: date[0], lte: date[1] } };
+  if (date.length === 1) return { date: { equals: date[0] } };
+
+  return {};
 };
 
 const filterByRoute = ({ from, to }: { from: string; to: string }): Prisma.FlightWhereInput => {
   return { route: { AND: { to: { contains: to }, from: { contains: from } } } };
 };
 
-export const getFlights = async ({ page, per, to = '', date = '', from = '' }: IFlightParams) => {
+export const getFlights = async ({ page, per, to = '', date = [], from = '' }: IFlightParams) => {
   return withDbClient(async client => {
     const filter: Prisma.FlightWhereInput = {
       ...filterByRoute({ to, from }),

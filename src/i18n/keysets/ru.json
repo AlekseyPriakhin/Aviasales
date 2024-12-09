@@ -1,6 +1,6 @@
 {
   "common": {
-    "hello": "Привет {{name}}!", 
+    "hello": "Привет {{name}}!",
     "clickButton": "Нажми на меня",
     "loadMore": "Показать еще",
     "loading": "Загрузка...",
@@ -27,6 +27,11 @@
     "Business": "Бизнес класс",
     "Economy": "Эконом класс"
   },
+  "ticketCard": {
+    "toFlight": "Перейти к рейсу",
+    "active": "Текущие",
+    "elapsed": "Архив"
+  },
   "flightPage": {
     "over": "Места кончились",
     "book": "Оформить",
@@ -36,7 +41,7 @@
     "totalSeats": "Всего мест - {{total}}",
     "availableSeats": "Доступно мест - {{available}}",
     "chooseSeat": "Выбор места",
-    "notChosen": "Место не выбрано"
+    "notChosen": "Место не выбрано",
+    "toBookedTickets": "Перейти к билетам"
   }
-
 }
