@@ -7,11 +7,15 @@
 }
 
 .dropdown-item {
-  cursor: pointer;
   padding: 8px;
   border-radius: 6px;
 
-  &:hover {
-    background-color: colors.$neutral-300;
+  &.clickable {
+    cursor: pointer;
+
+    &:hover {
+      background-color: colors.$neutral-300;
+    }
   }
+
 }

@@ -26,12 +26,12 @@ interface IUsePaginatedQueryParams {
   per?: number;
 }
 
-interface ISingleQueryParams {
+interface ISingleQueryParams<TParams extends object = object> {
   key: any[];
   itemId?: string | number;
   url: string;
   enabled?: boolean;
-  initParams?: IParams;
+  initParams?: TParams;
 }
 //
 
@@ -47,19 +47,27 @@ export const purifyObject = <T extends object = object>(obj: T): T => {
   return res as T;
 };
 
-export const useCreateSingleQuery = <T>({ key, enabled = true, itemId, url, initParams }: ISingleQueryParams) => {
+export const useCreateSingleQuery = <T, TParams extends object = object>({
+  key,
+  enabled = true,
+  itemId,
+  url,
+  initParams,
+}: ISingleQueryParams<TParams>) => {
+  const [params, setParams] = useState(purifyObject<TParams>({ ...(initParams as TParams) }));
+
   const queryKey: any[] = [key];
-  if (initParams) queryKey.push(purifyObject(initParams));
+  if (params) queryKey.push(params);
 
   const query = useQuery({
     queryKey,
-    queryFn: () => api.get<IResponse<T>>(itemId ? `${url}/${itemId}` : url, { params: initParams }),
+    queryFn: () => api.get<IResponse<T>>(itemId ? `${url}/${itemId}` : url, { params: { ...purifyObject(params) } }),
     select: res => res.data.data,
     placeholderData: keepPreviousData,
     enabled,
   });
 
-  return { ...query, queryKey };
+  return { ...query, params, setParams, queryKey };
 };
 
 export const useCreatePaginatedQuery = <T, TParams extends IUsePaginatedQueryParams = IUsePaginatedQueryParams>({
@@ -68,11 +76,13 @@ export const useCreatePaginatedQuery = <T, TParams extends IUsePaginatedQueryPar
   initParams = { page: PAGE, per: PER } as TParams,
 }: IPaginatedQueryParams<T, TParams>) => {
   const [params, setParams] = useState<TParams>(purifyObject({ per: PER, page: PAGE, ...initParams }));
+  const wrappedSetParams = (newParams = {} as TParams) => setParams(old => ({ ...old, ...newParams }));
+
   const queryKey = [key, purifyObject(initParams)];
 
   const query = useQuery({
     queryKey,
-    queryFn: () => handler(initParams),
+    queryFn: () => handler(params),
     placeholderData: keepPreviousData,
     select: res => {
       // eslint-disable-next-line @typescript-eslint/no-use-before-define
@@ -86,7 +96,7 @@ export const useCreatePaginatedQuery = <T, TParams extends IUsePaginatedQueryPar
   const [isNothingFound, setIsNothingFound] = useState(false);
   const [pagination, setPagination] = useState<IPagination>({ page: PAGE, total: 0, count: PER, totalPages: 0 });
 
-  return { ...query, isNothingFound, queryKey, pagination, params, setParams };
+  return { ...query, isNothingFound, queryKey, pagination, params, setParams: wrappedSetParams };
 };
 
 type InfiniteQueryOptions<T> = UseInfiniteQueryOptions<

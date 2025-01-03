@@ -4,46 +4,29 @@ import styles from './AirportInputSearch.module.scss';
 import type { INodeProps } from '@/types';
 import { Collapse, TextField } from '@mui/material';
 
-const dictionary = [
-  {
-    name: 'Москва',
-    tag: 'MOW',
-  },
-  {
-    name: 'Санкт-Петербург',
-    tag: 'LED',
-  },
-  {
-    name: 'Казань',
-    tag: 'KZN',
-  },
-  {
-    name: 'Екатеринбург',
-    tag: 'EKB',
-  },
-  {
-    name: 'Новосибирск',
-    tag: 'NOV',
-  },
-];
-
 interface IParams extends INodeProps {
   label: string;
   value: string;
   setValue: (v: string) => void;
+  selectValue: (v: string) => void;
+  items: string[];
+  isLoading?: boolean;
 }
-const AirportInput = ({ className, label, value, setValue }: IParams) => {
+const AirportInput = ({ className, label, value, items, isLoading = false, setValue, selectValue }: IParams) => {
   const [isInputFocused, setIsInputFocused] = useState(false);
 
-  const filteredItems = dictionary.filter(item => item.name.includes(value) || item.tag.includes(value));
-  const isDropdownShown = isInputFocused && Boolean(filteredItems.length) && value.length > 2;
+  const isDropdownShown = isInputFocused;
+  const isNothingFound = items.length === 0;
 
   const input = useRef<HTMLInputElement>(null);
 
   const handleSelectDropdownItem = (v: string) => {
+    console.log('change');
+
+    selectValue(v);
     setValue(v);
     if (input.current) {
-      input.current.blur();
+      //input.current.blur();
     }
   };
 
@@ -60,15 +43,18 @@ const AirportInput = ({ className, label, value, setValue }: IParams) => {
       />
       <Collapse in={isDropdownShown}>
         <div className={styles['dropdown']}>
-          {dictionary
-            .filter(item => [item.name, item.tag].join(' ').includes(value))
-            .map(item => (
+          {isNothingFound && !isLoading && value.length > 0 && (
+            <div className={styles['dropdown-item']}>Ничего не нашлось</div>
+          )}
+          {items.length > 0 &&
+            !isNothingFound &&
+            items.map(item => (
               <div
-                className={styles['dropdown-item']}
+                className={[styles['dropdown-item'], styles['clickable']].join(' ')}
                 tabIndex={1}
-                key={item.tag}
-                onClick={() => handleSelectDropdownItem(item.name)}>
-                {item.name} {item.tag}
+                key={item}
+                onClick={() => handleSelectDropdownItem(item)}>
+                {item}
               </div>
             ))}
         </div>

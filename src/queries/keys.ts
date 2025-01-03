@@ -4,11 +4,16 @@ const flights = Object.assign(() => ['flights'], {
   }),
 });
 
+const routes = Object.assign(() => ['routes'], {
+  search: (tag = '') => [`search_${tag}`],
+});
+
 const tickets = Object.assign(() => ['tickets'], {});
 
 const queryKeys = {
   flights,
   tickets,
+  routes,
 };
 
 export default queryKeys;

@@ -15,6 +15,7 @@ import { useInfiniteFlights } from '@/queries/flights';
 
 import type { IFlight } from '@/types/flight';
 import Link from 'next/link';
+import { useSearchRoutesQuery } from '@/queries/routes';
 
 const flightsLayout = (flights: IFlight[]) => {
   return (
@@ -40,19 +41,35 @@ const Page = () => {
 
   const handleSearch = () => setParams({ from, to, date: date ? [date] : [] });
 
+  const {
+    items: itemsFrom,
+    search: searchFrom,
+    enabled,
+    params,
+    isLoading: isLoadingSearchFrom,
+  } = useSearchRoutesQuery('from');
+  const { items, search, isLoading: isLoadingSearch } = useSearchRoutesQuery('to');
+
   return (
     <UIContainer className={styles['container']}>
       <div className={styles['inputs']}>
+        {enabled ? 1 : 0}
+        {JSON.stringify(params)}
         <AirportInputSearch
+          items={itemsFrom}
+          isLoading={isLoadingSearchFrom}
           label="Откуда:"
           value={from}
-          setValue={setFrom}
+          setValue={v => (setFrom(v), searchFrom(v))}
+          selectValue={v => (console.log(v), setFrom(v), searchFrom(v))}
         />
-
         <AirportInputSearch
+          items={items}
+          isLoading={isLoadingSearch}
           label="Куда:"
           value={to}
           setValue={setTo}
+          selectValue={setTo}
         />
 
         <LocalizationProvider>
