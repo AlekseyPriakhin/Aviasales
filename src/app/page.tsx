@@ -16,6 +16,7 @@ import { useInfiniteFlights } from '@/queries/flights';
 import type { IFlight } from '@/types/flight';
 import Link from 'next/link';
 import { useSearchRoutesQuery } from '@/queries/routes';
+import { useSockets } from '@/hooks/sockets';
 
 const flightsLayout = (flights: IFlight[]) => {
   return (
@@ -32,6 +33,8 @@ const flightsLayout = (flights: IFlight[]) => {
 };
 
 const Page = () => {
+  const { disconnect } = useSockets();
+
   const [from, setFrom] = useState('');
   const [to, setTo] = useState('');
   const [date, setDate] = useState<string | null>(null);
@@ -53,8 +56,8 @@ const Page = () => {
   return (
     <UIContainer className={styles['container']}>
       <div className={styles['inputs']}>
-        {enabled ? 1 : 0}
-        {JSON.stringify(params)}
+        <Button onClick={disconnect}> Hello </Button>
+
         <AirportInputSearch
           items={itemsFrom}
           isLoading={isLoadingSearchFrom}
