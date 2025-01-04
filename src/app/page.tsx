@@ -1,6 +1,6 @@
 'use client';
 import UIContainer from '@/ui/UIContainer';
-import AirportInputSearch from '@/components/AirportInputSearch';
+import InputWithHints from '@/components/InputWithHints';
 import LocalizationProvider from '@/providers/LocalizationProvider';
 import LoadableListTemplate from '@/templates/LoadableListTemplate';
 import FlightCard from '@/components/FlightCard';
@@ -16,6 +16,7 @@ import { useInfiniteFlights } from '@/queries/flights';
 import type { IFlight } from '@/types/flight';
 import Link from 'next/link';
 import { useSearchRoutesQuery } from '@/queries/routes';
+import { useI18n } from '@/hooks/useI18n';
 
 const flightsLayout = (flights: IFlight[]) => {
   return (
@@ -41,35 +42,29 @@ const Page = () => {
 
   const handleSearch = () => setParams({ from, to, date: date ? [date] : [] });
 
-  const {
-    items: itemsFrom,
-    search: searchFrom,
-    enabled,
-    params,
-    isLoading: isLoadingSearchFrom,
-  } = useSearchRoutesQuery('from');
-  const { items, search, isLoading: isLoadingSearch } = useSearchRoutesQuery('to');
+  const { items: itemsFrom, search: searchFrom, isLoading: isLoadingSearchFrom } = useSearchRoutesQuery('from');
+  const { items: itemsTo, search: searchTo, isLoading: isLoadingSearchTo } = useSearchRoutesQuery('to');
+
+  const { t } = useI18n();
 
   return (
     <UIContainer className={styles['container']}>
       <div className={styles['inputs']}>
-        {enabled ? 1 : 0}
-        {JSON.stringify(params)}
-        <AirportInputSearch
+        <InputWithHints
           items={itemsFrom}
           isLoading={isLoadingSearchFrom}
-          label="Откуда:"
+          label={t('mainPage', 'routesFrom')}
           value={from}
           setValue={v => (setFrom(v), searchFrom(v))}
-          selectValue={v => (console.log(v), setFrom(v), searchFrom(v))}
+          selectValue={v => (setFrom(v), searchFrom(v))}
         />
-        <AirportInputSearch
-          items={items}
-          isLoading={isLoadingSearch}
-          label="Куда:"
+        <InputWithHints
+          items={itemsTo}
+          isLoading={isLoadingSearchTo}
+          label={t('mainPage', 'routesTo')}
           value={to}
-          setValue={setTo}
-          selectValue={setTo}
+          setValue={v => (setTo(v), searchTo(v))}
+          selectValue={v => (setTo(v), searchTo(v))}
         />
 
         <LocalizationProvider>
@@ -84,11 +79,11 @@ const Page = () => {
         <Button
           variant="contained"
           onClick={handleSearch}>
-          Искать
+          {t('mainPage', 'search:action')}
         </Button>
       </div>
       <section>
-        <div> Результаты поиска: </div>
+        <div> {t('mainPage', 'results')} </div>
         <LoadableListTemplate
           isLoading={isLoading}
           isNothingFound={isNothingFound}

@@ -1,8 +1,11 @@
 import React, { useRef, useState } from 'react';
-import styles from './AirportInputSearch.module.scss';
+import styles from './InputWithHints.module.scss';
+
+import { Grow, TextField } from '@mui/material';
+import { MIN_SEARCH_LENGTH } from '@/queries/routes';
 
 import type { INodeProps } from '@/types';
-import { Collapse, TextField } from '@mui/material';
+import { useI18n } from '@/hooks/useI18n';
 
 interface IParams extends INodeProps {
   label: string;
@@ -12,19 +15,20 @@ interface IParams extends INodeProps {
   items: string[];
   isLoading?: boolean;
 }
-const AirportInput = ({ className, label, value, items, isLoading = false, setValue, selectValue }: IParams) => {
+const InputWithHints = ({ className, label, value, items, isLoading = false, setValue, selectValue }: IParams) => {
+  const { t } = useI18n();
+
   const [isInputFocused, setIsInputFocused] = useState(false);
 
-  const isDropdownShown = isInputFocused;
-  const isNothingFound = items.length === 0;
+  const filteredItems = items.filter(item => item.toLowerCase() !== value.toLowerCase());
+
+  const isDropdownShown = isInputFocused && (value.length >= MIN_SEARCH_LENGTH || items.length > 0 || isLoading);
+  const isNothingFound = filteredItems.length === 0;
 
   const input = useRef<HTMLInputElement>(null);
 
   const handleSelectDropdownItem = (v: string) => {
-    console.log('change');
-
     selectValue(v);
-    setValue(v);
     if (input.current) {
       //input.current.blur();
     }
@@ -41,14 +45,15 @@ const AirportInput = ({ className, label, value, items, isLoading = false, setVa
         onBlur={() => setIsInputFocused(false)}
         onChange={e => setValue(e.target.value)}
       />
-      <Collapse in={isDropdownShown}>
+
+      <Grow in={isDropdownShown}>
         <div className={styles['dropdown']}>
-          {isNothingFound && !isLoading && value.length > 0 && (
-            <div className={styles['dropdown-item']}>Ничего не нашлось</div>
-          )}
-          {items.length > 0 &&
-            !isNothingFound &&
-            items.map(item => (
+          {isLoading ? (
+            <div className={styles['dropdown-item']}>{t('inputWithHints', 'loading')}</div>
+          ) : isNothingFound ? (
+            <div className={styles['dropdown-item']}>{t('inputWithHints', 'notFound')}</div>
+          ) : (
+            filteredItems.map(item => (
               <div
                 className={[styles['dropdown-item'], styles['clickable']].join(' ')}
                 tabIndex={1}
@@ -56,11 +61,12 @@ const AirportInput = ({ className, label, value, items, isLoading = false, setVa
                 onClick={() => handleSelectDropdownItem(item)}>
                 {item}
               </div>
-            ))}
+            ))
+          )}
         </div>
-      </Collapse>
+      </Grow>
     </div>
   );
 };
 
-export default AirportInput;
+export default InputWithHints;

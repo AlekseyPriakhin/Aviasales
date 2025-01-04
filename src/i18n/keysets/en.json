@@ -12,6 +12,12 @@
     "/flights": "Flights",
     "/tickets": "My Tickets"
   },
+  "mainPage": {
+    "routesFrom": "From:",
+    "routesTo": "To:",
+    "results": "Results:",
+    "search:action": "Search"
+  },
   "currency": {
     "RUB": "RUB",
     "USD": "USD",
@@ -40,5 +46,9 @@
     "chooseSeatAction": "Choose seat",
     "notChosen": "Not chosen",
     "toBookedTickets": "View booked tickets"
+  },
+  "inputWithHints": {
+    "notFound": "Not found",
+    "loading": "Loading..."
   }
 }

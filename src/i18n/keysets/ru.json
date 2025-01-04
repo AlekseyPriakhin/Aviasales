@@ -9,6 +9,12 @@
     "confirm": "Подтвердить",
     "authorizeAction": "Авторизоваться"
   },
+  "mainPage": {
+    "routesFrom": "Откуда:",
+    "routesTo": "Куда:",
+    "results": "Результаты поиска:",
+    "search:action": "Искать"
+  },
   "routes": {
     "/": "Главная",
     "/flights": "Рейсы",
@@ -43,5 +49,9 @@
     "chooseSeat": "Выбор места",
     "notChosen": "Место не выбрано",
     "toBookedTickets": "Перейти к билетам"
+  },
+  "inputWithHints": {
+    "notFound": "Ничего не нашлось",
+    "loading": "Загрузка..."
   }
 }
