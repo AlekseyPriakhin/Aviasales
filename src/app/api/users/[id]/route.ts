@@ -19,6 +19,7 @@ export async function GET(_: NextRequest, { params }: { params: Promise<{ id: st
       name: user.name as string,
       phoneNumber: user.phoneNumber as string,
       secondName: user.secondName as string,
+      role: (user as any).role || 'user',
     }),
   );
 }

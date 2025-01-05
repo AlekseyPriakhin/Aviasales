@@ -1,18 +1,19 @@
-import { useCreateSingleQuery } from "@/queries";
-import type { IUser } from "@/types/user";
-import { useSession } from "next-auth/react";
-import { useState } from "react";
+import { useCreateSingleQuery } from '@/queries';
+import { useSession } from 'next-auth/react';
+import queryKeys from '@/queries/keys';
 
-const URL = '/users';
+import type { IUser } from '@/types/user';
 
-export const useMe = async () => {
+const URL = '/me';
 
-  const {status} = useSession();
+export const useMe = () => {
+  const { status } = useSession();
 
-  return useCreateSingleQuery<IUser>({
-    key: ['me'],
-    url: '/users',
-    itemId: 1,
+  const { data, ...query } = useCreateSingleQuery<IUser>({
+    key: queryKeys.me(),
+    url: URL,
     enabled: status === 'authenticated',
   });
+
+  return { me: data, ...query };
 };

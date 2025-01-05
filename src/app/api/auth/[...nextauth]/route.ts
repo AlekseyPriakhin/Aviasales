@@ -43,6 +43,34 @@ const checkUser = async ({ email, password }: { email: string; password: string 
 export const authOptions: NextAuthOptions = {
   session: { strategy: 'jwt' },
   adapter: PrismaAdapter(db) as Adapter,
+  pages: {
+    signIn: '/login',
+  },
+  // callbacks: {
+  //   async jwt({ token, user, account, trigger, session }) {
+  //     console.log('user', user);
+
+  //     if (user) {
+  //       token.id = user.id;
+  //       token.email = user.email as string;
+  //       token.role = 'Administrator';
+  //     }
+  //     return token;
+  //   },
+  //   async session({ session, token }) {
+  //     console.log('session');
+
+  //     return {
+  //       ...session,
+  //       user: {
+  //         ...session.user,
+  //         id: token.id as string,
+  //         email: token.email as string,
+  //         role: token.role as string,
+  //       },
+  //     };
+  //   },
+  // },
   providers: [
     CredentialsProvider({
       name: 'password',

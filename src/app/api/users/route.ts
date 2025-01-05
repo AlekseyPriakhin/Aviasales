@@ -24,6 +24,7 @@ export async function GET(request: NextRequest) {
         name: name as string,
         secondName: secondName as string,
         phoneNumber: phoneNumber as string,
+        role: 'user',
       })),
       { page, count: per, total: 1, totalPages: 1 },
     ),

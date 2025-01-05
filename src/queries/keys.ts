@@ -10,10 +10,13 @@ const routes = Object.assign(() => ['routes'], {
 
 const tickets = Object.assign(() => ['tickets'], {});
 
+const me = Object.assign(() => ['me'], {});
+
 const queryKeys = {
   flights,
   tickets,
   routes,
+  me,
 };
 
 export default queryKeys;
