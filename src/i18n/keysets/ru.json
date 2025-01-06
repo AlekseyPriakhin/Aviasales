@@ -18,7 +18,10 @@
   "routes": {
     "/": "Главная",
     "/flights": "Рейсы",
-    "/tickets": "Мои билеты"
+    "/tickets": "Мои билеты",
+    "/admin": "Панель админа",
+    "/admin/flights": "Рейсы",
+    "/admin/routes": "Маршруты"
   },
   "currency": {
     "RUB": "рублей",

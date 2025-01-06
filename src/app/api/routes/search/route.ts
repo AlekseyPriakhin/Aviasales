@@ -1,6 +1,6 @@
 import { getSearchResults } from '@/server/repository/searchQuery';
 import { NextRequest, NextResponse } from 'next/server';
-import { wrapToResponse } from '../..';
+import { wrapToResponse } from '@/app/api';
 
 const params = (request: NextRequest) => ({
   query: request.nextUrl.searchParams.get('query') || '',

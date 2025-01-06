@@ -1,0 +1,10 @@
+.link {
+    &:hover {
+        text-decoration: underline;
+        cursor: pointer;
+    }
+}
+
+.current {
+    color: colors.$black;
+}

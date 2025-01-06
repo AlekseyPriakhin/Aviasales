@@ -1,3 +1,5 @@
+import { Role } from '@/types/user';
+
 export type Currency = 'EUR' | 'USD' | 'RUB';
 
 export interface Route {
@@ -28,6 +30,7 @@ export interface User {
   phoneNumber: string;
   email: string;
   password: string;
+  role: Role;
 }
 
 export interface Ticket {

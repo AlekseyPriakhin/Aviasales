@@ -20,6 +20,7 @@ const seedUsers = async () => {
         email: 'alex@mail.com',
         phoneNumber: '79845672341',
         password: encrypt('Qwerty123'),
+        role: 'admin',
       },
       {
         name: 'Alice',
@@ -27,6 +28,7 @@ const seedUsers = async () => {
         email: 'alice@mail.com',
         phoneNumber: '79845672342',
         password: encrypt('Qwerty123'),
+        role: 'user',
       },
       {
         name: 'Bob',
@@ -34,6 +36,7 @@ const seedUsers = async () => {
         email: 'bob@mail.com',
         phoneNumber: '79845672343',
         password: encrypt('Qwerty123'),
+        role: 'user',
       },
     ];
 
@@ -83,7 +86,7 @@ const seedFlights = async () => {
     data: [
       {
         company: 'Пупа аирлаинс',
-        date: new Date('2024-10-28 14:00:00').toISOString(),
+        date: new Date('2025-10-28 14:00:00').toISOString(),
         duration: 150,
         reservedSeatsCount: 0,
         totalSeatsCount: 190,
@@ -96,7 +99,7 @@ const seedFlights = async () => {
       },
       {
         company: 'Лупа аирлаинс',
-        date: new Date('2024-10-28 14:00:00').toISOString(),
+        date: new Date('2025-10-28 14:00:00').toISOString(),
         duration: 145,
         reservedSeatsCount: 0,
         totalSeatsCount: 180,

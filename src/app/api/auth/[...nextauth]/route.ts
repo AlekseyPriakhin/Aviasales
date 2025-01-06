@@ -7,6 +7,7 @@ import { db } from '@/server/db';
 import type { NextAuthOptions } from 'next-auth';
 import type { Adapter } from 'next-auth/adapters';
 import { SHA256 } from 'crypto-js';
+import type { Role } from '@/types/user';
 
 interface ISessionUser {
   id: string;
@@ -14,6 +15,7 @@ interface ISessionUser {
   secondName: string;
   email: string;
   phoneNumber: string;
+  role: Role;
 }
 
 // declare module 'next-auth' {
@@ -34,6 +36,7 @@ const checkUser = async ({ email, password }: { email: string; password: string 
       name: user.name as string,
       secondName: user.secondName as string,
       phoneNumber: user.phoneNumber as string,
+      role: user.role as Role,
     };
   }
 

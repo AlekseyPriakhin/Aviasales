@@ -11,7 +11,7 @@ const UIForm = ({ children, className, submitBtnText, onSubmit }: IProps) => {
   return (
     <form
       onSubmit={e => (e.preventDefault(), onSubmit())}
-      className={[className, styles['form']].join(' ')}>
+      className={[styles['form'], className].join(' ')}>
       {children}
       <Button
         type="submit"

@@ -1,6 +1,8 @@
 import { NextRequest } from 'next/server';
 import { getServerAuthSession } from './auth/[...nextauth]/route';
 import { IError } from '@/server/repository';
+import { Role } from '@/types/user';
+import { findUserBySession } from '@/server/repository/users';
 
 export const PAGE = 1;
 export const PER = 10;
@@ -42,9 +44,15 @@ export const extractPaginationData = (req: NextRequest) => ({
   per: Number(req.nextUrl.searchParams.get('per')) || PER,
 });
 
-export const authorize = async (): Promise<[{ email: string } | null, IError | null]> => {
+export const authorize = async (role?: Role): Promise<[{ email: string } | null, IError | null]> => {
   const session = await getServerAuthSession();
   if (!session || !session.user) return [null, { message: 'Not authorized', code: 401 }];
+
+  if (role) {
+    const user = await findUserBySession({ email: session.user.email as string });
+    if (user?.role !== role) return [null, { message: 'Request forbidden', code: 403 }];
+  }
+
   return [{ email: String(session.user.email) }, null];
 };
 

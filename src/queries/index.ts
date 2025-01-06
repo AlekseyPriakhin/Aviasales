@@ -35,11 +35,10 @@ interface ISingleQueryParams<TParams extends object = object> {
 }
 //
 
-interface IPaginatedQueryParams<T = unknown, TParams extends object = object> {
-  key: string;
-  itemId: string | number;
+interface IPaginatedQueryParams<TParams extends object = object> {
+  key: any[];
   initParams?: TParams;
-  handler: (params?: TParams) => Promise<IResponseList<T>> | IResponseList<T>;
+  url: string;
 }
 
 export const purifyObject = <T extends object = object>(obj: T): T => {
@@ -72,29 +71,40 @@ export const useCreateSingleQuery = <T, TParams extends object = object>({
 
 export const useCreatePaginatedQuery = <T, TParams extends IUsePaginatedQueryParams = IUsePaginatedQueryParams>({
   key,
-  handler,
+  url,
   initParams = { page: PAGE, per: PER } as TParams,
-}: IPaginatedQueryParams<T, TParams>) => {
+}: IPaginatedQueryParams<TParams>) => {
   const [params, setParams] = useState<TParams>(purifyObject({ per: PER, page: PAGE, ...initParams }));
   const wrappedSetParams = (newParams = {} as TParams) => setParams(old => ({ ...old, ...newParams }));
 
-  const queryKey = [key, purifyObject(initParams)];
+  const queryKey = [key, purifyObject(params)];
 
   const query = useQuery({
     queryKey,
-    queryFn: () => handler(params),
+    queryFn: async () => {
+      const { data } = await api.get<IResponseList<T>>(url, { params: { ...purifyObject(params) } });
+      return data;
+    },
     placeholderData: keepPreviousData,
     select: res => {
       // eslint-disable-next-line @typescript-eslint/no-use-before-define
       setIsNothingFound(res.pagination.count === 0);
       // eslint-disable-next-line @typescript-eslint/no-use-before-define
       setPagination({ ...res.pagination });
-      return res.data;
+      return res.data || [];
     },
   });
 
   const [isNothingFound, setIsNothingFound] = useState(false);
   const [pagination, setPagination] = useState<IPagination>({ page: PAGE, total: 0, count: PER, totalPages: 0 });
+
+  // useEffect(() => {
+  //   if (query.data) {
+  //     setIsNothingFound(pagination.total === 0); // TODO почемуто undefined
+  //     setPagination(p => query.data);
+  //     setIsFetchNextPageAvailable(pagination.page < (query.data.pages.at(-1)?.pagination.totalPages ?? 1));
+  //   }
+  // }, [query.data, pagination.page]);
 
   return { ...query, isNothingFound, queryKey, pagination, params, setParams: wrappedSetParams };
 };

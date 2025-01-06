@@ -10,7 +10,10 @@
   "routes": {
     "/": "Root",
     "/flights": "Flights",
-    "/tickets": "My Tickets"
+    "/tickets": "My Tickets",
+    "/admin": "Admin Panel",
+    "/admin/flights": "Flights",
+    "/admin/routes": "Routes"
   },
   "mainPage": {
     "routesFrom": "From:",

@@ -7,11 +7,12 @@ import eur from '@/images/icons/eur.svg';
 import CalendarMonthOutlinedIcon from '@mui/icons-material/CalendarMonthOutlined';
 import ArrowRightAltOutlinedIcon from '@mui/icons-material/ArrowRightAltOutlined';
 import AccessTimeOutlinedIcon from '@mui/icons-material/AccessTimeOutlined';
+import AddRoundedIcon from '@mui/icons-material/AddRounded';
 
 import type { INodeProps } from '@/types';
 import { Currency } from '@/types/ticketClass';
 
-type IconName = Currency | 'calendar' | 'arrow-right' | 'time';
+type IconName = Currency | 'calendar' | 'arrow-right' | 'time' | 'add';
 
 interface IProps extends INodeProps {
   size?: string;
@@ -23,6 +24,7 @@ const nameComponentMap = {
   calendar: CalendarMonthOutlinedIcon,
   'arrow-right': ArrowRightAltOutlinedIcon,
   time: AccessTimeOutlinedIcon,
+  add: AddRoundedIcon,
   EUR: eur,
   RUB: rub,
   USD: usd,

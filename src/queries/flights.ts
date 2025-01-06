@@ -1,4 +1,4 @@
-import { useCreateInfiniteQuery, useCreateSingleQuery } from '@/queries';
+import { useCreateInfiniteQuery, useCreatePaginatedQuery, useCreateSingleQuery } from '@/queries';
 
 import queryKeys from '@/queries/keys';
 
@@ -17,6 +17,16 @@ export const useInfiniteFlights = (params?: IFlightParams) => {
   });
 
   return { flights: data, ...query };
+};
+
+export const usePaginatedFlights = (params?: IFlightParams) => {
+  const { data, ...query } = useCreatePaginatedQuery<IFlight, IFlightParams>({
+    key: ['flights-pagy'],
+    url: URL,
+    initParams: params,
+  });
+
+  return { flights: data || [], ...query };
 };
 
 export const useFlight = (id: number) => {

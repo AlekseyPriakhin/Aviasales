@@ -1,7 +1,7 @@
 import { ISession, withDbClient } from '@/server/repository';
 
 import type { User } from '@prisma/client';
-import type { IUser } from '@/types/user';
+import type { IUser, Role } from '@/types/user';
 
 const mapUser = (user: User): IUser => ({
   id: user.id,
@@ -9,7 +9,7 @@ const mapUser = (user: User): IUser => ({
   secondName: user.secondName as string,
   phoneNumber: user.phoneNumber as string,
   email: user.email as string,
-  role: 'user',
+  role: user.role as Role,
 });
 
 export const getUser = (id: string) => {

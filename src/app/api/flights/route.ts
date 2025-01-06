@@ -22,3 +22,5 @@ export async function GET(request: NextRequest) {
 
   return NextResponse.json(wrapToResponse(data, pagination));
 }
+
+export async function POST() {}
