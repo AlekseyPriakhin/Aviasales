@@ -20,7 +20,6 @@ export interface IRouteCreateParams {
   description: string;
 }
 
-// TODO добавить проверку роли
 export async function POST(request: NextRequest) {
   const [session, authErr] = await authorize('admin');
   if (authErr || !session) return authErr;

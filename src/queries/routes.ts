@@ -54,9 +54,7 @@ export const useCreateRoute = () => {
     method: 'post',
     options: {
       onSuccess: () => {
-        console.log('invalidate', queryKeys.routes());
-
-        queryClient.invalidateQueries({ queryKey: queryKeys.routes() });
+        queryClient.invalidateQueries({ queryKey: [queryKeys.routes()] });
       },
     },
   });
@@ -64,13 +62,13 @@ export const useCreateRoute = () => {
   return { createRoute: mutate, queryClient, ...query };
 };
 
-export const useUpdateRoute = (routeId: ID) => {
+export const useUpdateRoute = (routeId?: ID) => {
   const { mutate, queryClient, ...query } = useCreateMutation<IRoute, IRouteCreateParams>({
     url: `${URL}/${routeId}`,
     method: 'put',
     options: {
       onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: queryKeys.routes() });
+        queryClient.invalidateQueries({ queryKey: [queryKeys.routes()] });
       },
     },
   });

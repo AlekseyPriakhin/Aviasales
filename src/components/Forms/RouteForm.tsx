@@ -6,7 +6,7 @@ import { TextField } from '@mui/material';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
-import { useCreateRoute } from '@/queries/routes';
+import { useCreateRoute, useUpdateRoute } from '@/queries/routes';
 import { useToast } from '@/hooks/useToast';
 
 interface IProps extends INodeProps {
@@ -31,20 +31,22 @@ const schema = yup
 
 const RouteForm = ({ route, onSubmitCb }: IProps) => {
   const { createRoute } = useCreateRoute();
+  const { updateRoute } = useUpdateRoute(route?.id);
 
   const isUpdate = !!route;
 
   const { showFailed, showSuccess } = useToast();
 
   const onSubmit = (params: IFormData) => {
-    if (!isUpdate)
-      createRoute({
-        params,
-        options: {
-          onSuccess: () => (showSuccess('Маршрут создан'), onSubmitCb?.()),
-          onError: () => showFailed('Не удалось создать маршрут'),
-        },
-      });
+    const handler = isUpdate ? updateRoute : createRoute;
+
+    handler({
+      params,
+      options: {
+        onSuccess: () => (showSuccess(isUpdate ? 'Маршрут обновлен' : 'Маршрут создан'), onSubmitCb?.()),
+        onError: () => showFailed(isUpdate ? 'Не удалось обновить маршрут' : 'Не удалось создать маршрут'),
+      },
+    });
   };
 
   const {
