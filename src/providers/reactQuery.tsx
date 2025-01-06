@@ -1,7 +1,7 @@
 'use client';
 import { useState } from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools/production';
+// import { ReactQueryDevtools } from '@tanstack/react-query-devtools/production';
 import type { INodeProps } from '@/types';
 
 export default function ReactQueryProvider({ children }: INodeProps) {
@@ -21,7 +21,7 @@ export default function ReactQueryProvider({ children }: INodeProps) {
   return (
     <QueryClientProvider client={queryClient}>
       {children}
-      <ReactQueryDevtools initialIsOpen={false} />
+      {/* <ReactQueryDevtools initialIsOpen={false} /> */}
     </QueryClientProvider>
   );
 }

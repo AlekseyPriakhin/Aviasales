@@ -54,7 +54,7 @@ export const useCreateRoute = () => {
     method: 'post',
     options: {
       onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: [queryKeys.routes()] });
+        queryClient.invalidateQueries({ queryKey: queryKeys.routes() });
       },
     },
   });
@@ -68,7 +68,7 @@ export const useUpdateRoute = (routeId?: ID) => {
     method: 'put',
     options: {
       onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: [queryKeys.routes()] });
+        queryClient.invalidateQueries({ queryKey: queryKeys.routes() });
       },
     },
   });

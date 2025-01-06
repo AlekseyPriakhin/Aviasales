@@ -55,7 +55,7 @@ export const useCreateSingleQuery = <T, TParams extends object = object>({
 }: ISingleQueryParams<TParams>) => {
   const [params, setParams] = useState(purifyObject<TParams>({ ...(initParams as TParams) }));
 
-  const queryKey: any[] = [key];
+  const queryKey: any[] = [...key];
   if (params) queryKey.push(params);
 
   const query = useQuery({
@@ -77,7 +77,7 @@ export const useCreatePaginatedQuery = <T, TParams extends IUsePaginatedQueryPar
   const [params, setParams] = useState<TParams>(purifyObject({ per: PER, page: PAGE, ...initParams }));
   const wrappedSetParams = (newParams = {} as TParams) => setParams(old => ({ ...old, ...newParams }));
 
-  const queryKey = [key, purifyObject(params)];
+  const queryKey = [...key, purifyObject(params)];
 
   const query = useQuery({
     queryKey,
@@ -132,7 +132,7 @@ export const useCreateInfiniteQuery = <T = any, Params extends IParams = IParams
   initParams = {} as Params,
 }: IInfiniteParams<T, Params>) => {
   const [params, setParams] = useState(purifyObject({ per: PER, page: PAGE, ...initParams }));
-  const queryKey = [key, purifyObject(params)];
+  const queryKey = [...key, purifyObject(params)];
 
   const [isNothingFound, setNothingFound] = useState<boolean>(false);
   const [pagination, setPagination] = useState<IPagination>({ page: PAGE, total: 0, count: PER, totalPages: 0 });
