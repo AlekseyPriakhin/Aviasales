@@ -23,6 +23,12 @@
     "/admin/flights": "Рейсы",
     "/admin/routes": "Маршруты"
   },
+  "routeEntity": {
+    "id": "id",
+    "from": "Откуда",
+    "to": "Куда",
+    "description": "Описание"
+  },
   "currency": {
     "RUB": "рублей",
     "USD": "долларов",

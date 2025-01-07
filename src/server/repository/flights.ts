@@ -1,7 +1,9 @@
 import { createPaginationParams, paginate, withDbClient } from '@/server/repository';
 import { mapFlight } from '@/server/repository/mappers';
 import { Prisma } from '@prisma/client';
-import type { IFlightParams } from '@/app/api/flights/route';
+import { Currency } from '@/server/model';
+
+import type { IFlightCreateParams, IFlightParams } from '@/app/api/flights/route';
 import type { IReservedSeatsParams } from '@/app/api/flights/[id]/reserved/route';
 import type { ISeat } from '@/types/ticket';
 
@@ -63,5 +65,69 @@ export const getReservedSeats = async (id: number, params = {} as IReservedSeats
       ticketClassId: t.ticketClassId,
       ticketClass: t.ticketClass.name as ISeat['ticketClass'],
     }));
+  });
+};
+
+export const createFlight = (params: IFlightCreateParams) => {
+  return withDbClient(async client => {
+    const ticketClasses = params.ticketClasses;
+
+    const totalSeats = ticketClasses.reduce((acc, tc) => acc + tc.total, 0);
+
+    const flight = await client.flight.create({
+      data: {
+        company: params.company,
+        date: new Date(params.date),
+        duration: params.duration,
+        availableSeatsCount: totalSeats,
+        reservedSeatsCount: 0,
+        routeId: params.routeId,
+        departureAirport: params.departureAirport,
+        departureAirportCode: params.departureAirportCode,
+        arrivingAirport: params.arrivingAirport,
+        arrivingAirportCode: params.arrivingAirportCode,
+        totalSeatsCount: totalSeats,
+      },
+    });
+
+    ticketClasses.forEach(async (e, i) => {
+      await client.ticketClass.create({
+        data: { ...e, order: i, available: e.total, reserved: 0, currency: Currency.RUB, flightId: flight.id },
+      });
+    });
+
+    return getFlight(flight.id);
+  });
+};
+
+export const updateFlight = (id: number, params: IFlightCreateParams) => {
+  return withDbClient(async client => {
+    const ticketClasses = params.ticketClasses;
+    const total = ticketClasses.reduce((acc, tc) => acc + tc.total, 0);
+
+    await client.flight.update({
+      where: { id },
+      data: {
+        company: params.company,
+        date: new Date(params.date),
+        duration: params.duration,
+        availableSeatsCount: total,
+        routeId: params.routeId,
+        departureAirport: params.departureAirport,
+        departureAirportCode: params.departureAirportCode,
+        arrivingAirport: params.arrivingAirport,
+        arrivingAirportCode: params.arrivingAirportCode,
+        totalSeatsCount: total,
+      },
+    });
+
+    ticketClasses.forEach(async e => {
+      await client.ticketClass.update({
+        where: { id: e.id },
+        data: { ...e },
+      });
+    });
+
+    return getFlight(id);
   });
 };

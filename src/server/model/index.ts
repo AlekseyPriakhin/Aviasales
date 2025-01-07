@@ -2,6 +2,12 @@ import { Role } from '@/types/user';
 
 export type Currency = 'EUR' | 'USD' | 'RUB';
 
+export const Currency = {
+  EUR: 'EUR',
+  USD: 'USD',
+  RUB: 'RUB',
+};
+
 export interface Route {
   id: number;
   from: string;

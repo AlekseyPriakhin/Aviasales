@@ -9,7 +9,7 @@ import UIPageContent from '@/ui/UIPageContent';
 import UIPageHeader from '@/ui/UIPageHeader';
 
 const RoutesAdminPage = () => {
-  const { routes, params, pagination, setParams } = usePaginatedRoutes({ per: 10 });
+  const { routes, params, pagination, isLoading, setParams } = usePaginatedRoutes({ per: 10 });
   const { t } = useI18n();
 
   return (
@@ -22,17 +22,23 @@ const RoutesAdminPage = () => {
       </UIPageHeader>
       <UIPageContent>
         <TableTemplate
-          headers={['id', 'from', 'to', 'description']}
+          headers={[
+            ['id', 'id'],
+            ['from', 'Откуда'],
+            ['to', 'Куда'],
+            ['description', 'Описание'],
+          ]}
           data={routes}
           pagination={pagination}
           per={params.per}
+          isLoading={isLoading}
           onPageChange={page => setParams({ page })}
           onRowsPerPageChange={per => setParams({ per })}
           formComponent={(toggleDrawer, r) => (
             <DrawerContent title={!r ? 'Создать' : 'Редактировать'}>
               <RouteForm
                 route={r}
-                onSubmitCb={toggleDrawer}
+                onSubmit={toggleDrawer}
               />
             </DrawerContent>
           )}

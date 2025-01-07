@@ -11,7 +11,7 @@ import { useToast } from '@/hooks/useToast';
 
 interface IProps extends INodeProps {
   route?: IRoute;
-  onSubmitCb?: () => void;
+  onSubmit?: () => void;
 }
 
 interface IFormData {
@@ -29,7 +29,7 @@ const schema = yup
   })
   .required();
 
-const RouteForm = ({ route, onSubmitCb }: IProps) => {
+const RouteForm = ({ route, onSubmit: onSubmitCb }: IProps) => {
   const { createRoute } = useCreateRoute();
   const { updateRoute } = useUpdateRoute(route?.id);
 

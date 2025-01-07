@@ -1,9 +1,9 @@
-import { useCreateInfiniteQuery, useCreatePaginatedQuery, useCreateSingleQuery } from '@/queries';
+import { useCreateInfiniteQuery, useCreateMutation, useCreatePaginatedQuery, useCreateSingleQuery } from '@/queries';
 
 import queryKeys from '@/queries/keys';
 
 import type { IFlight } from '@/types/flight';
-import type { IFlightParams } from '@/app/api/flights/route';
+import type { IFlightCreateParams, IFlightParams } from '@/app/api/flights/route';
 import type { ISeat } from '@/types/ticket';
 import type { IReservedSeatsParams } from '@/app/api/flights/[id]/reserved/route';
 
@@ -21,7 +21,7 @@ export const useInfiniteFlights = (params?: IFlightParams) => {
 
 export const usePaginatedFlights = (params?: IFlightParams) => {
   const { data, ...query } = useCreatePaginatedQuery<IFlight, IFlightParams>({
-    key: ['flights-pagy'],
+    key: queryKeys.flights(),
     url: URL,
     initParams: params,
   });
@@ -47,4 +47,32 @@ export const useReservedSeats = (id: number, params?: IReservedSeatsParams) => {
   });
 
   return { reservedSeats: data || [], ...query };
+};
+
+export const useCreateFlight = () => {
+  const { mutate, queryClient, ...query } = useCreateMutation<IFlight, IFlightCreateParams>({
+    method: 'post',
+    url: URL,
+    options: {
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: queryKeys.flights() });
+      },
+    },
+  });
+
+  return { createFlight: mutate, queryClient, ...query };
+};
+
+export const useUpdateFlight = (id: number) => {
+  const { mutate, queryClient, ...query } = useCreateMutation<IFlight, IFlightCreateParams>({
+    method: 'put',
+    url: `${URL}/${id}`,
+    options: {
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: queryKeys.flights() });
+      },
+    },
+  });
+
+  return { updateFlight: mutate, queryClient, ...query };
 };

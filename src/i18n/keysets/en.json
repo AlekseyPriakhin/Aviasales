@@ -15,6 +15,12 @@
     "/admin/flights": "Flights",
     "/admin/routes": "Routes"
   },
+  "routeEntity": {
+    "id": "id",
+    "from": "From",
+    "to": "To",
+    "description": "Description"
+  },
   "mainPage": {
     "routesFrom": "From:",
     "routesTo": "To:",

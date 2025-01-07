@@ -1,6 +1,6 @@
 import { Prisma } from '@prisma/client';
 
-export const updateCounters = (): Prisma.TicketClassUpdateInput => {
+export const updateCountersAfterNewTicket = (): Prisma.TicketClassUpdateInput => {
   return {
     available: { decrement: 1 },
     reserved: { increment: 1 },

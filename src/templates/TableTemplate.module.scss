@@ -1,3 +1,10 @@
 .drawer {
     padding: 16px 32px;
 }
+
+.row {
+    &:hover {
+        cursor: pointer;
+        background-color: colors.$neutral-200;
+    }
+}

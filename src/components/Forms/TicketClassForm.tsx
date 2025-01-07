@@ -1,28 +1,54 @@
 import { IFlight } from '@/types/flight';
-import { TicketClassName } from '@/types/ticketClass';
-import { TextField } from '@mui/material';
+import { InputLabel, MenuItem, Select, TextField } from '@mui/material';
+
+import type { ITicketClassFormData } from '@/components/Forms/FlightForm';
+import type { Currency, TicketClassName } from '@/types/ticketClass';
+
+import styles from './TicketClassForm.module.scss';
+import { useI18n } from '@/hooks/useI18n';
 
 interface IProps {
   flight?: IFlight;
-  value: Record<TicketClassName, number>;
-  onChange: (counts: Record<TicketClassName, number>) => void;
+  value: Record<TicketClassName, ITicketClassFormData>;
+  onChange: (classes: Record<TicketClassName, ITicketClassFormData>) => void;
 }
 
 const TicketClassForm = ({ value, onChange }: IProps) => {
-  const classes: TicketClassName[] = ['First', 'Business', 'Economy'];
+  const { t } = useI18n();
+
+  const currencys: Currency[] = ['RUB', 'USD', 'EUR'];
 
   return (
-    <>
-      {classes.map(c => (
-        <TextField
-          key={c}
-          type="number"
-          label={c}
-          value={value[c]}
-          onChange={e => onChange({ ...value, [c]: Number(e.target.value) })}
-        />
+    <div className={styles['form']}>
+      Классы билетов
+      <InputLabel id="currency-select-label">Валюта</InputLabel>
+      <Select labelId="currency-select-label">
+        {currencys.map(c => (
+          <MenuItem
+            key={c}
+            value={c}>
+            {c}
+          </MenuItem>
+        ))}
+      </Select>
+      {[value.First, value.Business, value.Economy].map(c => (
+        <div
+          key={c.name}
+          className={styles['field']}>
+          {t('tickets', c.name)} -
+          <TextField
+            value={c.total}
+            onChange={e => onChange({ ...value, [c.name]: { ...c, total: Number(e.target.value) } })}
+            label="Кол-во мест"
+          />
+          <TextField
+            value={c.cost}
+            onChange={e => onChange({ ...value, [c.name]: { ...c, cost: Number(e.target.value) } })}
+            label="Стоимость"
+          />
+        </div>
       ))}
-    </>
+    </div>
   );
 };
 

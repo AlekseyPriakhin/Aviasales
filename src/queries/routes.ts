@@ -1,5 +1,5 @@
 import { IRouteCreateParams, IRouteParams } from '@/app/api/routes/route';
-import { useCreateMutation, useCreatePaginatedQuery, useCreateSingleQuery } from '@/queries';
+import { useCreateInfiniteQuery, useCreateMutation, useCreatePaginatedQuery, useCreateSingleQuery } from '@/queries';
 import queryKeys from '@/queries/keys';
 import { ID } from '@/types';
 import { IRoute } from '@/types/route';
@@ -12,6 +12,16 @@ interface ISearchParams {
 }
 
 export const MIN_SEARCH_LENGTH = 3;
+
+export const useInfiniteRoutes = (params?: IRouteParams) => {
+  const { data, ...query } = useCreateInfiniteQuery<IRoute, IRouteParams>({
+    key: queryKeys.routes(),
+    url: URL,
+    initParams: params,
+  });
+
+  return { routes: data, ...query };
+};
 
 export const usePaginatedRoutes = (params?: IRouteParams) => {
   const { data, ...query } = useCreatePaginatedQuery<IRoute, IRouteParams>({
