@@ -13,6 +13,7 @@ interface IProps<T> extends INodeProps {
   hasNextPage?: boolean;
   isFetching?: boolean;
   loadMoreLayout?: React.ReactDOM;
+  topContent?: React.ReactNode;
   itemsLayout: (items: T[]) => React.ReactNode;
   onLoadMore?: () => void;
 }
@@ -28,13 +29,16 @@ const LoadableListTemplate = <T,>({
   items,
   hasNextPage = false,
   isFetching = false,
+  topContent,
   itemsLayout,
   onLoadMore = () => {},
+
   className,
 }: IProps<T>) => {
   return (
-    <div>
-      {isLoading || isFetching ? (
+    <div className={styles['container']}>
+      {topContent}
+      {isLoading ? (
         loadingLayout
       ) : isNothingFound || !items ? (
         nothingFoundLayout

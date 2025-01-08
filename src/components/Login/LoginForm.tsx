@@ -46,7 +46,7 @@ const LoginForm = () => {
       className={styles['form']}>
       <TextField
         name="mail"
-        label="Почта"
+        label="Электронная почта"
         variant="outlined"
         value={mail}
         onChange={e => setMail(e.target.value)}

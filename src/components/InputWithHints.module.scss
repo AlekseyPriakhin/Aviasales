@@ -1,9 +1,14 @@
+.search {
+  position: relative;
+}
+
 .dropdown {
   display: flex;
   flex-direction: column;
   margin-top: 2px;
   border: 1px solid colors.$border;
   border-radius: 6px;
+  position: absolute;
 }
 
 .dropdown-item {

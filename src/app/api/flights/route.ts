@@ -9,6 +9,7 @@ export interface IFlightParams extends IParams {
   from?: string;
   to?: string;
   date?: string[];
+  sortBy?: 'date' | 'seats';
 }
 
 const params = (request: NextRequest): IFlightParams => ({

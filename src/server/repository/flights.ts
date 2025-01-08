@@ -18,7 +18,13 @@ const filterByRoute = ({ from, to }: { from: string; to: string }): Prisma.Fligh
   return { route: { AND: { to: { contains: to }, from: { contains: from } } } };
 };
 
-export const getFlights = async ({ page, per, to = '', date = [], from = '' }: IFlightParams) => {
+const orderBy = (sort?: IFlightParams['sortBy']): Prisma.FlightOrderByWithRelationInput => {
+  if (sort === 'date') return { date: 'asc' };
+  if (sort === 'seats') return { availableSeatsCount: 'asc' };
+  return {};
+};
+
+export const getFlights = async ({ page, per, to = '', sortBy = undefined, date = [], from = '' }: IFlightParams) => {
   return withDbClient(async client => {
     const filter: Prisma.FlightWhereInput = {
       ...filterByRoute({ to, from }),
@@ -30,6 +36,7 @@ export const getFlights = async ({ page, per, to = '', date = [], from = '' }: I
         ...createPaginationParams(page, per),
         include: { route: true, ticketClasses: true },
         where: filter,
+        orderBy: orderBy(sortBy),
       });
     const totalQuery = () => client.flight.count({ where: filter });
 

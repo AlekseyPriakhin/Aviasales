@@ -23,39 +23,41 @@ const TicketSelect = ({ ticketClasses, tickets, onBook }: IProps) => {
 
   return (
     <div className={styles['cards']}>
-      {ticketClasses.map(tc => (
-        <Card
-          key={tc.id}
-          className={styles['card']}>
-          <div className={styles['card-content']}>
-            <span> {t('tickets', tc.name)} </span>
-            <span className={styles['cost']}>
-              {tc.cost}
-              <UIIcon
-                name={tc.currency}
-                size="16px"
-              />
-            </span>
-            <span>{t('flightPage', 'availableSeats', { available: tc.available })}</span>
-            <span>{t('flightPage', 'totalSeats', { total: tc.total })}</span>
-          </div>
-          <AuthorizableButton>
-            <Button
-              variant="contained"
-              disabled={bookedClasses.includes(tc.name)}
-              onClick={() => onBook({ ticketClass: tc })}>
-              {bookedClasses.includes(tc.name) ? t('flightPage', 'booked') : t('flightPage', 'book')}
-            </Button>
-          </AuthorizableButton>
-          {bookedClasses.includes(tc.name) && (
-            <Button
-              href={createAppRoute('/tickets', { searchParams: { flightId: String(tc.flightId) } })}
-              variant="contained">
-              {t('flightPage', 'toBookedTickets')}
-            </Button>
-          )}
-        </Card>
-      ))}
+      {ticketClasses
+        .filter(t => t.total > 0)
+        .map(tc => (
+          <Card
+            key={tc.id}
+            className={styles['card']}>
+            <div className={styles['card-content']}>
+              <span> {t('tickets', tc.name)} </span>
+              <span className={styles['cost']}>
+                {tc.cost}
+                <UIIcon
+                  name={tc.currency}
+                  size="16px"
+                />
+              </span>
+              <span>{t('flightPage', 'availableSeats', { available: tc.available })}</span>
+              <span>{t('flightPage', 'totalSeats', { total: tc.total })}</span>
+            </div>
+            <AuthorizableButton>
+              <Button
+                variant="contained"
+                disabled={bookedClasses.includes(tc.name)}
+                onClick={() => onBook({ ticketClass: tc })}>
+                {bookedClasses.includes(tc.name) ? t('flightPage', 'booked') : t('flightPage', 'book')}
+              </Button>
+            </AuthorizableButton>
+            {bookedClasses.includes(tc.name) && (
+              <Button
+                href={createAppRoute('/tickets', { searchParams: { flightId: String(tc.flightId) } })}
+                variant="contained">
+                {t('flightPage', 'toBookedTickets')}
+              </Button>
+            )}
+          </Card>
+        ))}
     </div>
   );
 };

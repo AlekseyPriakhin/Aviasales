@@ -1,5 +1,4 @@
 'use client';
-import UIContainer from '@/ui/UIContainer';
 import LoadableListTemplate from '@/templates/LoadableListTemplate';
 
 import styles from './page.module.scss';
@@ -13,6 +12,10 @@ import type { ITicketsParams } from '@api/tickets/route';
 import { useState } from 'react';
 import { Tab, Tabs } from '@mui/material';
 import { useI18n } from '@/hooks/useI18n';
+import UIPageContent from '@/ui/UIPageContent';
+import UIPageHeader from '@/ui/UIPageHeader';
+import UIBreadcrumbs from '@/ui/UIBreadcrumbs';
+import UITitle from '@/ui/UITitle';
 
 export type TICKET_TAB = 'active' | 'elapsed';
 const mapTabToTicketParam = (tab: TICKET_TAB): ITicketsParams['status'] => tab;
@@ -52,28 +55,34 @@ const Tickets = () => {
   };
 
   return (
-    <UIContainer>
-      <Tabs value={tab}>
-        <Tab
-          value={TABS.ACTIVE}
-          label={t('tickets', TABS.ACTIVE)}
-          onClick={() => handleTabClick(TABS.ACTIVE)}
+    <>
+      <UIPageHeader>
+        <UIBreadcrumbs breadcrumbs={[{ link: '/', label: t('routes', '/') }, { label: t('routes', '/tickets') }]} />
+        <UITitle title="Мои билеты" />
+      </UIPageHeader>
+      <UIPageContent>
+        <Tabs value={tab}>
+          <Tab
+            value={TABS.ACTIVE}
+            label={t('tickets', TABS.ACTIVE)}
+            onClick={() => handleTabClick(TABS.ACTIVE)}
+          />
+          <Tab
+            value={TABS.ELAPSED}
+            label={t('tickets', TABS.ELAPSED)}
+            onClick={() => handleTabClick(TABS.ELAPSED)}
+          />
+        </Tabs>
+        <LoadableListTemplate
+          isLoading={isLoading}
+          isNothingFound={isNothingFound}
+          isFetching={isFetching}
+          hasNextPage={hasNextPage}
+          items={tickets}
+          itemsLayout={TicketsLayout}
         />
-        <Tab
-          value={TABS.ELAPSED}
-          label={t('tickets', TABS.ELAPSED)}
-          onClick={() => handleTabClick(TABS.ELAPSED)}
-        />
-      </Tabs>
-      <LoadableListTemplate
-        isLoading={isLoading}
-        isNothingFound={isNothingFound}
-        isFetching={isFetching}
-        hasNextPage={hasNextPage}
-        items={tickets}
-        itemsLayout={TicketsLayout}
-      />
-    </UIContainer>
+      </UIPageContent>
+    </>
   );
 };
 

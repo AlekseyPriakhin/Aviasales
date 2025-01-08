@@ -11,11 +11,11 @@ import type { ITicketCreateParams, ITicketsParams } from '@api/tickets/route';
 import type { TError, ISession } from '@/server/repository';
 import type { ITicket } from '@/types/ticket';
 
-const filterByFlight = (flightId?: number): Prisma.TicketWhereInput => {
-  if (!flightId) return {};
+// const filterByFlight = (flightId?: number): Prisma.TicketWhereInput => {
+//   if (!flightId) return {};
 
-  return { ticketClass: { flightId } };
-};
+//   return { ticketClass: { flight: { id: flightId } } };
+// };
 
 const filterByStatus = (status: ITicketsParams['status']): Prisma.TicketWhereInput => {
   const date: Prisma.DateTimeFilter<typeof MODEL_NAMES.FLIGHT> =
@@ -28,7 +28,7 @@ export const getTickets = async ({ page, per, flightId: id, status = 'active' }:
   return withDbClient(async client => {
     const filter: Prisma.TicketWhereInput = {
       user: filterByUser(session),
-      ...filterByFlight(id),
+      // ...filterByFlight(id),
       ...filterByStatus(status),
     };
 
@@ -36,7 +36,7 @@ export const getTickets = async ({ page, per, flightId: id, status = 'active' }:
       client.ticket.findMany({
         include: { ticketClass: { include: { flight: { include: { route: true } } } }, user: true },
         ...createPaginationParams(page, per),
-        where: filter,
+        where: { ...filter, ticketClass: { flight: { id } } },
       });
     const totalQuery = () => client.ticket.count({ where: filter });
 

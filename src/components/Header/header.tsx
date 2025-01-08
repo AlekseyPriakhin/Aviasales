@@ -19,7 +19,7 @@ export default function Header() {
 
   const links: ILink[] = [
     { label: t('routes', '/'), href: '/' },
-    { label: t('routes', '/flights'), href: '/flights' },
+    // { label: t('routes', '/flights'), href: '/flights' },
   ];
 
   if (status === 'authenticated') links.push({ label: t('routes', '/tickets'), href: '/tickets' });

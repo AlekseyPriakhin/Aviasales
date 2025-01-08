@@ -5,6 +5,9 @@ import UIPageContent from '@/ui/UIPageContent';
 import UIIcon from '@/ui/UIIcon';
 import TicketSelect from '@/components/TicketSelect/TicketSelect';
 import TicketSelectWithSeatModal from '@/components/TicketSelect/TicketSelectWithSeatModal';
+import UITitle from '@/ui/UITitle';
+import UIBreadcrumbs from '@/ui/UIBreadcrumbs';
+import AuthorizableButton from '@/components/AuthorizableButton';
 
 import styles from './page.module.scss';
 
@@ -72,11 +75,12 @@ const Flight = ({ params: { id } }: IProps) => {
   return (
     <>
       <UIPageHeader>
-        <h1>
+        <UIBreadcrumbs breadcrumbs={[{ link: '/', label: t('routes', '/') }, { label: id }]} />
+        <UITitle>
           <span className={styles['title-content']}>
             {t('common', 'flight')} <UIIcon name="arrow-right" /> {flight.route?.from}{' '}
           </span>
-        </h1>
+        </UITitle>
         <p> {flight.route?.description}</p>
       </UIPageHeader>
       <UIPageContent>
@@ -89,11 +93,13 @@ const Flight = ({ params: { id } }: IProps) => {
                 {selectedData}
               </p>
             ) : (
-              <Button
-                variant="contained"
-                onClick={() => setOpen(true)}>
-                {t('flightPage', 'chooseSeatAction')}
-              </Button>
+              <AuthorizableButton>
+                <Button
+                  variant="contained"
+                  onClick={() => setOpen(true)}>
+                  {t('flightPage', 'chooseSeatAction')}
+                </Button>
+              </AuthorizableButton>
             )}
             <Button
               variant="contained"
