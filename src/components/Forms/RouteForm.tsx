@@ -50,7 +50,7 @@ const RouteForm = ({ route, onSubmit: onSubmitCb }: IProps) => {
   };
 
   const {
-    formState: { errors },
+    formState: { errors, isLoading },
     register,
     handleSubmit,
   } = useForm<IFormData>({
@@ -65,7 +65,8 @@ const RouteForm = ({ route, onSubmit: onSubmitCb }: IProps) => {
   return (
     <UIForm
       submitBtnText={isUpdate ? 'Сохранить' : 'Создать'}
-      onSubmit={handleSubmit(onSubmit)}>
+      onSubmit={handleSubmit(onSubmit)}
+      isLoading={isLoading}>
       <TextField
         label="Откуда"
         {...register('from')}

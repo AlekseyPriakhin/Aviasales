@@ -55,7 +55,7 @@ const schema = yup
 
 export default function FlightForm({ flight, onSubmit: onSubmitCb }: IProps) {
   const {
-    formState: { errors },
+    formState: { errors, isLoading },
     register,
     control,
     handleSubmit,
@@ -124,7 +124,8 @@ export default function FlightForm({ flight, onSubmit: onSubmitCb }: IProps) {
   return (
     <UIForm
       onSubmit={handleSubmit(onSubmit)}
-      submitBtnText={isUpdate ? 'Сохранить' : 'Создать'}>
+      submitBtnText={isUpdate ? 'Сохранить' : 'Создать'}
+      isLoading={isLoading}>
       <TextField
         label="Компания"
         required
