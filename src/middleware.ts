@@ -9,9 +9,9 @@ const authorizableRoutes: AppRoute[] = ['/tickets', '/admin', '/admin/flights', 
 const adminRoutes: AppRoute[] = ['/admin', '/admin/flights', '/admin/routes'];
 
 const fetchUserRole = async (email: string) => {
-    const res = await api.get<string>(`${process.env.NEXTAUTH_URL}${BASE_URL}/users/role`, { params: { email } });
+    const res = await api.get<{ role: string }>(`${process.env.NEXTAUTH_URL}${BASE_URL}/users/role`, { params: { email } });
 
-    return res?.data as Role || null;
+    return res?.data.role as Role || null;
 };
 
 const getUserToken = (request: NextRequest) =>
