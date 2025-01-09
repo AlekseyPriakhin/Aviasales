@@ -59,6 +59,7 @@ const Flight = ({ params: { id } }: IProps) => {
       },
       options: {
         onSuccess: () => {
+          setSelected(null);
           [flightQueryKey, ticketsQueryKey].forEach(queryKey => {
             queryClient.invalidateQueries({ queryKey });
           });

@@ -17,6 +17,7 @@ const params = (request: NextRequest): IFlightParams => ({
   from: request.nextUrl.searchParams.get('from') || '',
   to: request.nextUrl.searchParams.get('to') || '',
   date: request.nextUrl.searchParams.getAll('date') || [],
+  sortBy: (request.nextUrl.searchParams.get('sortBy') as IFlightParams['sortBy']) || undefined,
 });
 
 export async function GET(request: NextRequest) {

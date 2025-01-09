@@ -61,15 +61,25 @@ const FlightCard = ({ flight }: IProps) => {
         <span>{flight.company}</span>
       </div>
 
-      <div className={styles['date-time']}>
-        <UIIcon name="time" />
-        <span>
+      <div className={styles['icons']}>
+        <UIIcon
+          name="time"
+          contentPosition="after">
           {startDateTime.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' })} {' - '}
           {arrivingDateTime.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' })}
-        </span>
+        </UIIcon>
 
-        <UIIcon name="calendar" />
-        <span>{date}</span>
+        <UIIcon
+          name="calendar"
+          contentPosition="after">
+          {date}
+        </UIIcon>
+
+        <UIIcon
+          name="seat"
+          contentPosition="after">
+          {flight.availableSeatsCount}
+        </UIIcon>
       </div>
     </Card>
   );

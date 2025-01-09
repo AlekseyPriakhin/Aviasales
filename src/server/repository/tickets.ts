@@ -5,7 +5,6 @@ import { mapTicket } from '@/server/repository/mappers';
 
 import { MODEL_NAMES } from '@/server/model';
 import { getNextSeat, validateSeat } from '@/server/model/ticket';
-import { updateCountersAfterNewTicket } from '@/server/model/ticketClass';
 
 import type { ITicketCreateParams, ITicketsParams } from '@api/tickets/route';
 import type { TError, ISession } from '@/server/repository';
@@ -84,7 +83,14 @@ export const create = ({ ticketClassId, flightId, ticketClass, seat }: ITicketCr
 
     if (!ticket) return [null, { message: 'Ticket not created', code: 500 }];
 
-    await client.ticketClass.update({ where: { id: ticketClassId }, data: updateCountersAfterNewTicket() });
+    await client.flight.update({
+      where: { id: flightId },
+      data: { availableSeatsCount: { decrement: 1 }, reservedSeatsCount: { increment: 1 } },
+    });
+    await client.ticketClass.update({
+      where: { id: ticketClassId },
+      data: { available: { decrement: 1 }, reserved: { increment: 1 } },
+    });
 
     return [mapTicket(ticket), null];
   });

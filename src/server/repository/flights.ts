@@ -20,7 +20,7 @@ const filterByRoute = ({ from, to }: { from: string; to: string }): Prisma.Fligh
 
 const orderBy = (sort?: IFlightParams['sortBy']): Prisma.FlightOrderByWithRelationInput => {
   if (sort === 'date') return { date: 'asc' };
-  if (sort === 'seats') return { availableSeatsCount: 'asc' };
+  if (sort === 'seats') return { availableSeatsCount: 'desc' };
   return {};
 };
 

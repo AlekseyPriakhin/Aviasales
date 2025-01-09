@@ -8,10 +8,10 @@
   height: 100%;
   gap: 12px;
   background: colors.$neutral-200;
- 
+
   &:hover {
     cursor: pointer;
-     background: colors.$neutral-300; 
+    background: colors.$neutral-300;
   }
 
   .company {
@@ -32,10 +32,11 @@
     gap: 8px;
   }
 
-  .date-time {
+  .icons {
     @include fonts.caption;
     display: flex;
     gap: 16px;
+    justify-content: space-between;
     align-items: center;
   }
 }
