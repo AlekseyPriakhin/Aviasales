@@ -21,6 +21,15 @@ export const getUser = (id: string) => {
   });
 };
 
+export const getUserRole = (email: string) =>
+  withDbClient<Role | null>(async client => {
+    const user = await client.user.findFirst({ where: { email } });
+
+    if (!user) return null;
+
+    return user.role as Role;
+  });
+
 export const findUserBySession = (session: ISession) => {
   return withDbClient<IUser | null>(async client => {
     const user = await client.user.findFirst({ where: { email: session.email } });
