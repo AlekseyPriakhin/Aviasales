@@ -1,5 +1,6 @@
 import { authorize, extractBody, extractPaginationData, wrapToResponse, type IParams } from '@/app/api';
 import { createRoute, getRoutes } from '@/server/repository/routes';
+import { clearCache } from '@/server/repository/searchQuery';
 import { NextRequest, NextResponse } from 'next/server';
 
 export type IRouteParams = IParams;
@@ -26,6 +27,8 @@ export async function POST(request: NextRequest) {
 
   const data = await extractBody<IRouteCreateParams>(request);
   const route = await createRoute(data);
+
+  clearCache();
 
   return NextResponse.json(wrapToResponse(route));
 }

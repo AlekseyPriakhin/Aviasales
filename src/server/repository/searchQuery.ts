@@ -26,6 +26,8 @@ const getAndUpdateTime = (query: string): string[] => {
   return cache.get(query)?.result || [];
 };
 
+export const clearCache = () => cache.clear();
+
 export const getSearchResults = async (query: string) => {
   if (!cache.has(query)) {
     const result = await withDbClient(async client => {

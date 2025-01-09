@@ -3,6 +3,8 @@
 }
 
 .dropdown {
+  max-height: 90px;
+  overflow: auto;
   display: flex;
   flex-direction: column;
   margin-top: 2px;
